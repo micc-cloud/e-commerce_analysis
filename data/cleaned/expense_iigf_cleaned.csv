@@ -1,0 +1,22 @@
+transaction_type,record_type,particular,amount
+received_amount,detail,06-19-22,1000
+received_amount,detail,06-20-22,1500
+received_amount,detail,06-22-22,500
+received_amount,detail,06-23-22,2000
+received_amount,summary,Total,5000
+expense,detail,Large Bag,380
+expense,detail,"Stationary(Soft Pin, Paper pin for Dupatta, Fevikwick)",170
+expense,detail,OLA,839
+expense,detail,Auto Rent,520
+expense,detail,TT Fine,500
+expense,detail,Bhushan Hotel,2506
+expense,detail,Food,1290
+expense,detail,Expomart Labour Charge,200
+expense,detail,Choclate,400
+expense,detail,Bhushan Cash,800
+expense,detail,Delhi Hotel Rest Room,120
+expense,detail,Water Bottel,70
+expense,detail,Cooli,300
+expense,summary,Unlabelled expense total/balance,8095
+expense,summary,Pending Amount,-3095
+expense,summary,Unlabelled expense total/balance,5000

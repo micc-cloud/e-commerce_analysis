@@ -1,0 +1,7 @@
+.DS_Store
+.Rhistory
+__pycache__/
+*.pyc
+
+# Original uploaded archive copy; raw extracted CSVs can be restored from the source archive.
+data/raw/archive.zip

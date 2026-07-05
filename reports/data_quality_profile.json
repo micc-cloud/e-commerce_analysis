@@ -1,0 +1,457 @@
+[
+  {
+    "file": "Amazon Sale Report.csv",
+    "raw_rows": 128975,
+    "raw_columns": 24,
+    "cleaned_rows": 128969,
+    "cleaned_columns": 22,
+    "exact_duplicate_rows_removed": 6,
+    "missing_values": [
+      {
+        "column": "fulfilled_by",
+        "missing_count": 89692,
+        "missing_pct": 69.55
+      },
+      {
+        "column": "promotion_ids",
+        "missing_count": 49150,
+        "missing_pct": 38.11
+      },
+      {
+        "column": "currency",
+        "missing_count": 7792,
+        "missing_pct": 6.04
+      },
+      {
+        "column": "amount",
+        "missing_count": 7792,
+        "missing_pct": 6.04
+      },
+      {
+        "column": "courier_status",
+        "missing_count": 6872,
+        "missing_pct": 5.33
+      },
+      {
+        "column": "ship_country",
+        "missing_count": 33,
+        "missing_pct": 0.03
+      },
+      {
+        "column": "ship_postal_code",
+        "missing_count": 33,
+        "missing_pct": 0.03
+      },
+      {
+        "column": "ship_state",
+        "missing_count": 33,
+        "missing_pct": 0.03
+      },
+      {
+        "column": "ship_city",
+        "missing_count": 33,
+        "missing_pct": 0.03
+      }
+    ],
+    "negative_values": {},
+    "columns": [
+      "order_id",
+      "date",
+      "status",
+      "fulfilment",
+      "sales_channel",
+      "ship_service_level",
+      "style",
+      "sku",
+      "category",
+      "size",
+      "asin",
+      "courier_status",
+      "qty",
+      "currency",
+      "amount",
+      "ship_city",
+      "ship_state",
+      "ship_postal_code",
+      "ship_country",
+      "promotion_ids",
+      "b2b",
+      "fulfilled_by"
+    ],
+    "notes": [
+      "Dropped generated index column.",
+      "Dropped parser artifact column `unnamed_22`.",
+      "Removed 6 exact duplicate rows."
+    ],
+    "cleaned_file": "amazon_sale_report_cleaned.csv"
+  },
+  {
+    "file": "Cloud Warehouse Compersion Chart.csv",
+    "raw_rows": 50,
+    "raw_columns": 4,
+    "cleaned_rows": 4,
+    "cleaned_columns": 3,
+    "exact_duplicate_rows_removed": 0,
+    "missing_values": [
+      {
+        "column": "increff_price_per_unit",
+        "missing_count": 1,
+        "missing_pct": 25.0
+      }
+    ],
+    "negative_values": {},
+    "columns": [
+      "cost_head",
+      "shiprocket_price_per_unit",
+      "increff_price_per_unit"
+    ],
+    "notes": [
+      "Promoted embedded first row to semantic column names.",
+      "Converted rupee-denominated per-unit prices to numeric values.",
+      "Removed narrative section headings without comparable price values."
+    ],
+    "cleaned_file": "cloud_warehouse_compersion_chart_cleaned.csv"
+  },
+  {
+    "file": "Expense IIGF.csv",
+    "raw_rows": 17,
+    "raw_columns": 5,
+    "cleaned_rows": 21,
+    "cleaned_columns": 4,
+    "exact_duplicate_rows_removed": 0,
+    "missing_values": [],
+    "negative_values": {
+      "amount": 1
+    },
+    "columns": [
+      "transaction_type",
+      "record_type",
+      "particular",
+      "amount"
+    ],
+    "notes": [
+      "Reshaped two side-by-side receipt and expense sections into one auditable long table.",
+      "Flagged totals, pending amount, and unlabelled balance rows as summary records.",
+      "Kept original spelling in source notes; standardized output column names."
+    ],
+    "cleaned_file": "expense_iigf_cleaned.csv"
+  },
+  {
+    "file": "International sale Report.csv",
+    "raw_rows": 37432,
+    "raw_columns": 10,
+    "cleaned_rows": 24541,
+    "cleaned_columns": 9,
+    "exact_duplicate_rows_removed": 12891,
+    "missing_values": [
+      {
+        "column": "sku",
+        "missing_count": 2425,
+        "missing_pct": 9.88
+      },
+      {
+        "column": "pcs",
+        "missing_count": 1041,
+        "missing_pct": 4.24
+      },
+      {
+        "column": "rate",
+        "missing_count": 1041,
+        "missing_pct": 4.24
+      },
+      {
+        "column": "gross_amt",
+        "missing_count": 1041,
+        "missing_pct": 4.24
+      },
+      {
+        "column": "customer",
+        "missing_count": 1040,
+        "missing_pct": 4.24
+      },
+      {
+        "column": "style",
+        "missing_count": 1040,
+        "missing_pct": 4.24
+      },
+      {
+        "column": "size",
+        "missing_count": 1040,
+        "missing_pct": 4.24
+      },
+      {
+        "column": "months",
+        "missing_count": 25,
+        "missing_pct": 0.1
+      },
+      {
+        "column": "date",
+        "missing_count": 1,
+        "missing_pct": 0.0
+      }
+    ],
+    "negative_values": {},
+    "columns": [
+      "date",
+      "months",
+      "customer",
+      "style",
+      "sku",
+      "size",
+      "pcs",
+      "rate",
+      "gross_amt"
+    ],
+    "notes": [
+      "Dropped generated index column.",
+      "Removed 12,891 exact duplicate rows."
+    ],
+    "cleaned_file": "international_sale_report_cleaned.csv"
+  },
+  {
+    "file": "May-2022.csv",
+    "raw_rows": 1330,
+    "raw_columns": 17,
+    "cleaned_rows": 1330,
+    "cleaned_columns": 16,
+    "exact_duplicate_rows_removed": 0,
+    "missing_values": [
+      {
+        "column": "weight",
+        "missing_count": 73,
+        "missing_pct": 5.49
+      },
+      {
+        "column": "mrp_old",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "final_mrp_old",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "ajio_mrp",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "amazon_mrp",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "amazon_fba_mrp",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "flipkart_mrp",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "limeroad_mrp",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "paytm_mrp",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "snapdeal_mrp",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "myntra_mrp",
+        "missing_count": 31,
+        "missing_pct": 2.33
+      },
+      {
+        "column": "tp",
+        "missing_count": 6,
+        "missing_pct": 0.45
+      }
+    ],
+    "negative_values": {},
+    "columns": [
+      "sku",
+      "style_id",
+      "catalog",
+      "category",
+      "weight",
+      "tp",
+      "mrp_old",
+      "final_mrp_old",
+      "ajio_mrp",
+      "amazon_mrp",
+      "amazon_fba_mrp",
+      "flipkart_mrp",
+      "limeroad_mrp",
+      "myntra_mrp",
+      "paytm_mrp",
+      "snapdeal_mrp"
+    ],
+    "notes": [
+      "Dropped generated index column."
+    ],
+    "cleaned_file": "may_2022_cleaned.csv"
+  },
+  {
+    "file": "P  L March 2021.csv",
+    "raw_rows": 1330,
+    "raw_columns": 18,
+    "cleaned_rows": 1330,
+    "cleaned_columns": 17,
+    "exact_duplicate_rows_removed": 0,
+    "missing_values": [
+      {
+        "column": "weight",
+        "missing_count": 73,
+        "missing_pct": 5.49
+      },
+      {
+        "column": "final_mrp_old",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "ajio_mrp",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "paytm_mrp",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "limeroad_mrp",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "flipkart_mrp",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "amazon_fba_mrp",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "amazon_mrp",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "snapdeal_mrp",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "mrp_old",
+        "missing_count": 37,
+        "missing_pct": 2.78
+      },
+      {
+        "column": "myntra_mrp",
+        "missing_count": 31,
+        "missing_pct": 2.33
+      },
+      {
+        "column": "tp_2",
+        "missing_count": 6,
+        "missing_pct": 0.45
+      },
+      {
+        "column": "tp_1",
+        "missing_count": 6,
+        "missing_pct": 0.45
+      }
+    ],
+    "negative_values": {},
+    "columns": [
+      "sku",
+      "style_id",
+      "catalog",
+      "category",
+      "weight",
+      "tp_1",
+      "tp_2",
+      "mrp_old",
+      "final_mrp_old",
+      "ajio_mrp",
+      "amazon_mrp",
+      "amazon_fba_mrp",
+      "flipkart_mrp",
+      "limeroad_mrp",
+      "myntra_mrp",
+      "paytm_mrp",
+      "snapdeal_mrp"
+    ],
+    "notes": [
+      "Dropped generated index column."
+    ],
+    "cleaned_file": "p_l_march_2021_cleaned.csv"
+  },
+  {
+    "file": "Sale Report.csv",
+    "raw_rows": 9271,
+    "raw_columns": 7,
+    "cleaned_rows": 9233,
+    "cleaned_columns": 6,
+    "exact_duplicate_rows_removed": 38,
+    "missing_values": [
+      {
+        "column": "sku_code",
+        "missing_count": 48,
+        "missing_pct": 0.52
+      },
+      {
+        "column": "category",
+        "missing_count": 10,
+        "missing_pct": 0.11
+      },
+      {
+        "column": "color",
+        "missing_count": 10,
+        "missing_pct": 0.11
+      },
+      {
+        "column": "design_no",
+        "missing_count": 1,
+        "missing_pct": 0.01
+      },
+      {
+        "column": "stock",
+        "missing_count": 1,
+        "missing_pct": 0.01
+      },
+      {
+        "column": "size",
+        "missing_count": 1,
+        "missing_pct": 0.01
+      }
+    ],
+    "negative_values": {},
+    "columns": [
+      "sku_code",
+      "design_no",
+      "stock",
+      "category",
+      "size",
+      "color"
+    ],
+    "notes": [
+      "Dropped generated index column.",
+      "Removed 38 exact duplicate rows."
+    ],
+    "cleaned_file": "sale_report_cleaned.csv"
+  }
+]
