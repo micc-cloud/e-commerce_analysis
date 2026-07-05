@@ -191,37 +191,3 @@ E-Commerce-Business-Intelligence/
 ├── images/
 └── README.md
 ```
-
----
-
-# 💡 What I Learned
-
-This project taught me that data analysis is not just about writing SQL queries or building dashboards.
-
-The most valuable part is understanding the business context, asking the right questions, and translating analytical findings into recommendations that decision-makers can actually use.
-
-It also gave me practical experience working with messy data, integrating multiple datasets, designing KPIs, and presenting insights in a business-oriented way.
-
----
-
-# 🚀 Future Improvements
-
-There are several directions I would like to explore in future versions of this project:
-
-* Sales forecasting
-* Customer segmentation using machine learning
-* Customer lifetime value prediction
-* Demand forecasting
-* Automated ETL pipeline
-* Cloud deployment using Microsoft Azure
-* AI-assisted analytics workflow
-
----
-
-# 👨‍💻 About Me
-
-I'm Michael Lam, a final-year Data Analytics student at The Hong Kong University of Science and Technology (HKUST).
-
-I'm interested in Business Analytics, Business Intelligence, and Data Analytics, especially in roles where data can be used to support strategic decision-making and improve business performance.
-
-If you have any suggestions or feedback on this project, I'd be happy to hear from you.
