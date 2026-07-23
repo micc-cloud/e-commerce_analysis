@@ -243,9 +243,47 @@ def clean_expense(path: Path) -> tuple[pd.DataFrame, dict]:
     return long_df, profile_frame(path.name, raw_df, long_df, notes, removed)
 
 
+def clean_international(path: Path) -> tuple[pd.DataFrame, dict]:
+    """Clean the international report using `months` to validate date months.
+
+    The source contains a later SKU-only/report-layout block. Those rows have no
+    transaction date and are excluded from the cleaned sales-grain output.
+    """
+    raw_df = read_csv(path)
+    df = raw_df.copy()
+    df.columns = [snake_case(col) for col in df.columns]
+    df = drop_index_like_columns(df)
+    for col in df.columns:
+        df[col] = df[col].map(clean_text_value)
+
+    date_values = pd.to_datetime(df["date"], format="%m-%d-%y", errors="coerce")
+    month_values = pd.to_datetime(df["months"], format="%b-%y", errors="coerce")
+    month_conflict = month_values.notna() & (
+        date_values.dt.month.ne(month_values.dt.month) | date_values.dt.year.ne(month_values.dt.year)
+    )
+    keep = date_values.notna() & ~month_conflict
+    removed_invalid = int((~keep).sum())
+    df = df.loc[keep].copy()
+    df["date"] = date_values.loc[keep].dt.strftime("%m/%d/%Y")
+    for col in ["pcs", "rate", "gross_amt"]:
+        df[col] = to_number(df[col])
+    for col in df.select_dtypes(include="object").columns:
+        df[col] = df[col].astype("string")
+    before_rows = len(df)
+    df = df.drop_duplicates().reset_index(drop=True)
+    removed_duplicates = before_rows - len(df)
+    notes = [
+        "Parsed source dates as month-day-year (`%m-%d-%y`) and formatted output as `mm/dd/yyyy`.",
+        "Validated the date month and year against the `months` field; conflicting rows were excluded.",
+        f"Excluded {removed_invalid:,} rows without a valid transaction date or with a conflicting month label.",
+    ]
+    return df, profile_frame(path.name, raw_df, df, notes, removed_duplicates)
+
+
 SPECIAL_CLEANERS = {
     "Cloud Warehouse Compersion Chart.csv": clean_warehouse,
     "Expense IIGF.csv": clean_expense,
+    "International sale Report.csv": clean_international,
 }
 
 

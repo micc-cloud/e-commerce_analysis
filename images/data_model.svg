@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720" role="img" aria-labelledby="title desc">
+  <title id="title">E-commerce analysis data model</title>
+  <desc id="desc">Candidate relationships among Amazon sales, international sales, product snapshots, stock snapshot, warehouse rates, and expense report.</desc>
+  <style>
+    .box { fill: #ffffff; stroke: #243b53; stroke-width: 2; }
+    .fact { fill: #e8f1fb; }
+    .ref { fill: #f4f1de; }
+    .warn { fill: #fff1e6; }
+    .title { font: 700 18px Arial, sans-serif; fill: #102a43; }
+    .text { font: 14px Arial, sans-serif; fill: #243b53; }
+    .small { font: 12px Arial, sans-serif; fill: #486581; }
+    .link { stroke: #627d98; stroke-width: 2; stroke-dasharray: 7 5; fill: none; }
+  </style>
+  <text x="40" y="38" class="title">E-commerce analysis data model</text>
+  <text x="40" y="62" class="small">Dashed links are candidate relationships requiring match-rate and grain validation.</text>
+
+  <rect x="40" y="100" width="330" height="190" rx="8" class="box fact"/>
+  <text x="60" y="130" class="title">Amazon sales lines</text>
+  <text x="60" y="158" class="text">order_id, date, status</text>
+  <text x="60" y="181" class="text">sku, qty, amount, currency</text>
+  <text x="60" y="204" class="text">fulfilment, courier_status</text>
+  <text x="60" y="227" class="text">category, size, geography, b2b</text>
+  <text x="60" y="260" class="small">128,969 rows | line grain</text>
+
+  <rect x="40" y="360" width="330" height="165" rx="8" class="box fact"/>
+  <text x="60" y="390" class="title">International sales lines</text>
+  <text x="60" y="418" class="text">date, months, customer text</text>
+  <text x="60" y="441" class="text">sku, pcs, rate, gross_amt</text>
+  <text x="60" y="464" class="text">style, size</text>
+  <text x="60" y="497" class="small">12,322 rows | no order ID</text>
+
+  <rect x="470" y="100" width="300" height="170" rx="8" class="box ref"/>
+  <text x="490" y="130" class="title">Product price snapshot</text>
+  <text x="490" y="158" class="text">may_2022: sku, style_id</text>
+  <text x="490" y="181" class="text">TP, MRP, marketplace MRP</text>
+  <text x="490" y="204" class="text">p_l_march_2021: sku, TP_1, TP_2</text>
+  <text x="490" y="237" class="small">1,330 unique SKU rows each</text>
+
+  <rect x="470" y="360" width="300" height="150" rx="8" class="box ref"/>
+  <text x="490" y="390" class="title">Stock snapshot</text>
+  <text x="490" y="418" class="text">sku_code, stock</text>
+  <text x="490" y="441" class="text">category, size, color</text>
+  <text x="490" y="474" class="small">9,233 rows | date absent</text>
+
+  <rect x="870" y="100" width="280" height="140" rx="8" class="box warn"/>
+  <text x="890" y="130" class="title">Warehouse rates</text>
+  <text x="890" y="158" class="text">cost_head</text>
+  <text x="890" y="181" class="text">Shiprocket/Increff rates</text>
+  <text x="890" y="214" class="small">Reference only; no sales key</text>
+
+  <rect x="870" y="320" width="280" height="160" rx="8" class="box warn"/>
+  <text x="890" y="350" class="title">Expense report</text>
+  <text x="890" y="378" class="text">transaction_type</text>
+  <text x="890" y="401" class="text">record_type, particular</text>
+  <text x="890" y="424" class="text">amount</text>
+  <text x="890" y="457" class="small">Detail + summary rows; no sales key</text>
+
+  <path d="M370 190 C420 190 425 185 470 185" class="link"/>
+  <text x="382" y="170" class="small">sku candidate</text>
+  <path d="M370 442 C420 442 425 210 470 210" class="link"/>
+  <text x="382" y="330" class="small">sku candidate</text>
+  <path d="M370 235 C430 300 430 420 470 420" class="link"/>
+  <text x="382" y="350" class="small">sku/sku_code weak link</text>
+  <path d="M770 185 C820 185 820 160 870 160" class="link"/>
+  <text x="785" y="145" class="small">no confirmed key</text>
+  <path d="M770 430 C820 430 820 400 870 400" class="link"/>
+  <text x="785" y="385" class="small">no confirmed key</text>
+
+  <text x="40" y="640" class="small">Analytical rule: keep sales facts separate by source, validate SKU joins, and do not allocate report-level costs to orders without a documented allocation basis.</text>
+</svg>

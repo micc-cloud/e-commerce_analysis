@@ -1,87 +1,124 @@
-# E-Commerce Data Quality & Cleaning Report
+# Phase 0: Repository and Cleaned Data Audit
 
-## Cleaning Rules Applied
+**Final status: PASS WITH WARNINGS**
 
-- Preserved raw files under `data/raw` and wrote cleaned files under `data/cleaned`.
-- Standardized column names to lowercase snake_case.
-- Removed generated index columns and fully empty columns.
-- Trimmed whitespace, normalized blank-like values to missing, and removed exact duplicate rows.
-- Converted numeric amount, price, quantity, rate, MRP, stock, and weight fields to numeric values where safe.
-- Converted date fields to ISO `YYYY-MM-DD` where safe.
-- Treated SKU, ASIN, order IDs, codes, and postal codes as text identifiers.
-- Reshaped special report-style CSVs into analysis-ready tables.
+## Scope
 
-## File-Level Summary
+- Audited all expected files under `data/cleaned`.
+- Used `scripts/clean_ecommerce_data.py` as the reproducibility source.
+- Raw source files were preserved; the international cleaned output was regenerated with the confirmed date/month correction.
 
-| File | Raw Rows | Cleaned Rows | Raw Columns | Cleaned Columns | Duplicate Rows Removed | Key Notes |
-|---|---:|---:|---:|---:|---:|---|
-| Amazon Sale Report.csv | 128,975 | 128,969 | 24 | 22 | 6 | Dropped generated index column. Dropped parser artifact column `unnamed_22`. Removed 6 exact duplicate rows. |
-| Cloud Warehouse Compersion Chart.csv | 50 | 4 | 4 | 3 | 0 | Promoted embedded first row to semantic column names. Converted rupee-denominated per-unit prices to numeric values. Removed narrative section headings without comparable price values. |
-| Expense IIGF.csv | 17 | 21 | 5 | 4 | 0 | Reshaped two side-by-side receipt and expense sections into one auditable long table. Flagged totals, pending amount, and unlabelled balance rows as summary records. Kept original spelling in source notes; standardized output column names. |
-| International sale Report.csv | 37,432 | 24,541 | 10 | 9 | 12,891 | Dropped generated index column. Removed 12,891 exact duplicate rows. |
-| May-2022.csv | 1,330 | 1,330 | 17 | 16 | 0 | Dropped generated index column. |
-| P  L March 2021.csv | 1,330 | 1,330 | 18 | 17 | 0 | Dropped generated index column. |
-| Sale Report.csv | 9,271 | 9,233 | 7 | 6 | 38 | Dropped generated index column. Removed 38 exact duplicate rows. |
+## File Inventory
 
-## Missing Value Highlights
+| File | Rows | Columns | Memory | Date range |
+|---|---:|---:|---:|---|
+| `amazon_sale_report_cleaned.csv` | 128,969 | 22 | 168.70 MB | 2022-03-31T00:00:00 to 2022-06-29T00:00:00 |
+| `cloud_warehouse_compersion_chart_cleaned.csv` | 4 | 3 | 0.00 MB | No date field |
+| `expense_iigf_cleaned.csv` | 21 | 4 | 0.00 MB | No date field |
+| `international_sale_report_cleaned.csv` | 12,322 | 9 | 4.35 MB | 2021-06-05T00:00:00 to 2022-05-11T00:00:00 |
+| `may_2022_cleaned.csv` | 1,330 | 16 | 0.41 MB | No date field |
+| `p_l_march_2021_cleaned.csv` | 1,330 | 17 | 0.42 MB | No date field |
+| `sale_report_cleaned.csv` | 9,233 | 6 | 2.51 MB | No date field |
 
-### Amazon Sale Report.csv
-- `fulfilled_by`: 89,692 missing (69.55%).
-- `promotion_ids`: 49,150 missing (38.11%).
-- `currency`: 7,792 missing (6.04%).
-- `amount`: 7,792 missing (6.04%).
-- `courier_status`: 6,872 missing (5.33%).
-- `ship_country`: 33 missing (0.03%).
-- `ship_postal_code`: 33 missing (0.03%).
-- `ship_state`: 33 missing (0.03%).
-- `ship_city`: 33 missing (0.03%).
+## Schema, Types, and Validation Findings
 
-### Cloud Warehouse Compersion Chart.csv
-- `increff_price_per_unit`: 1 missing (25.0%).
+### `amazon_sale_report_cleaned.csv`
 
-### Expense IIGF.csv
-- No missing values after cleaning.
-- Negative numeric values detected: `{"amount": 1}`.
+- Columns: `order_id, date, status, fulfilment, sales_channel, ship_service_level, style, sku, category, size, asin, courier_status, qty, currency, amount, ship_city, ship_state, ship_postal_code, ship_country, promotion_ids, b2b, fulfilled_by`
+- Dtypes: `{"amount": "float64", "asin": "object", "b2b": "bool", "category": "object", "courier_status": "object", "currency": "object", "date": "object", "fulfilled_by": "object", "fulfilment": "object", "order_id": "object", "promotion_ids": "object", "qty": "int64", "sales_channel": "object", "ship_city": "object", "ship_country": "object", "ship_postal_code": "float64", "ship_service_level": "object", "ship_state": "object", "size": "object", "sku": "object", "status": "object", "style": "object"}`
+- Exact duplicate rows: **0**
+- Candidate key `order_id`: 15,431 duplicate rows; 0 rows with null key parts.
+- Candidate key `order_id+sku+size`: 2 duplicate rows; 0 rows with null key parts.
+- Numeric checks: amount: {'nonblank': 121177, 'non_numeric_nonblank': 0, 'negative': 0, 'zero': 2343}; qty: {'nonblank': 128969, 'non_numeric_nonblank': 0, 'negative': 0, 'zero': 12804}
+- Leading/trailing whitespace: none detected.
 
-### International sale Report.csv
-- `sku`: 2,425 missing (9.88%).
-- `pcs`: 1,041 missing (4.24%).
-- `rate`: 1,041 missing (4.24%).
-- `gross_amt`: 1,041 missing (4.24%).
-- `customer`: 1,040 missing (4.24%).
-- `style`: 1,040 missing (4.24%).
-- `size`: 1,040 missing (4.24%).
-- `months`: 25 missing (0.1%).
-- `date`: 1 missing (0.0%).
+### `cloud_warehouse_compersion_chart_cleaned.csv`
 
-### May-2022.csv
-- `weight`: 73 missing (5.49%).
-- `mrp_old`: 37 missing (2.78%).
-- `final_mrp_old`: 37 missing (2.78%).
-- `ajio_mrp`: 37 missing (2.78%).
-- `amazon_mrp`: 37 missing (2.78%).
-- `amazon_fba_mrp`: 37 missing (2.78%).
-- `flipkart_mrp`: 37 missing (2.78%).
-- `limeroad_mrp`: 37 missing (2.78%).
-- `paytm_mrp`: 37 missing (2.78%).
-- `snapdeal_mrp`: 37 missing (2.78%).
+- Columns: `cost_head, shiprocket_price_per_unit, increff_price_per_unit`
+- Dtypes: `{"cost_head": "object", "increff_price_per_unit": "float64", "shiprocket_price_per_unit": "float64"}`
+- Exact duplicate rows: **0**
+- Candidate key `cost_head`: 0 duplicate rows; 0 rows with null key parts.
+- Numeric checks: No non-numeric values, negative values, or zero values detected in audited numeric fields.
+- Leading/trailing whitespace: none detected.
 
-### P  L March 2021.csv
-- `weight`: 73 missing (5.49%).
-- `final_mrp_old`: 37 missing (2.78%).
-- `ajio_mrp`: 37 missing (2.78%).
-- `paytm_mrp`: 37 missing (2.78%).
-- `limeroad_mrp`: 37 missing (2.78%).
-- `flipkart_mrp`: 37 missing (2.78%).
-- `amazon_fba_mrp`: 37 missing (2.78%).
-- `amazon_mrp`: 37 missing (2.78%).
-- `snapdeal_mrp`: 37 missing (2.78%).
-- `mrp_old`: 37 missing (2.78%).
+### `expense_iigf_cleaned.csv`
 
-### Sale Report.csv
-- `sku_code`: 48 missing (0.52%).
-- `category`: 10 missing (0.11%).
-- `color`: 10 missing (0.11%).
-- `design_no`: 1 missing (0.01%).
-- `stock`: 1 missing (0.01%).
-- `size`: 1 missing (0.01%).
+- Columns: `transaction_type, record_type, particular, amount`
+- Dtypes: `{"amount": "int64", "particular": "object", "record_type": "object", "transaction_type": "object"}`
+- Exact duplicate rows: **0**
+- Candidate key `transaction_type+record_type+particular+amount`: 0 duplicate rows; 0 rows with null key parts.
+- Numeric checks: amount: {'nonblank': 21, 'non_numeric_nonblank': 0, 'negative': 1, 'zero': 0}
+- Leading/trailing whitespace: none detected.
+
+### `international_sale_report_cleaned.csv`
+
+- Columns: `date, months, customer, style, sku, size, pcs, rate, gross_amt`
+- Dtypes: `{"customer": "object", "date": "object", "gross_amt": "float64", "months": "object", "pcs": "float64", "rate": "float64", "size": "object", "sku": "object", "style": "object"}`
+- Exact duplicate rows: **0**
+- Candidate key `date+customer+sku+size+pcs+rate+gross_amt`: 479 duplicate rows; 1,379 rows with null key parts.
+- Numeric checks: No non-numeric values, negative values, or zero values detected in audited numeric fields.
+- Leading/trailing whitespace: none detected.
+
+### `may_2022_cleaned.csv`
+
+- Columns: `sku, style_id, catalog, category, weight, tp, mrp_old, final_mrp_old, ajio_mrp, amazon_mrp, amazon_fba_mrp, flipkart_mrp, limeroad_mrp, myntra_mrp, paytm_mrp, snapdeal_mrp`
+- Dtypes: `{"ajio_mrp": "float64", "amazon_fba_mrp": "float64", "amazon_mrp": "float64", "catalog": "object", "category": "object", "final_mrp_old": "float64", "flipkart_mrp": "float64", "limeroad_mrp": "float64", "mrp_old": "float64", "myntra_mrp": "float64", "paytm_mrp": "float64", "sku": "object", "snapdeal_mrp": "float64", "style_id": "object", "tp": "float64", "weight": "float64"}`
+- Exact duplicate rows: **0**
+- Candidate key `sku`: 0 duplicate rows; 0 rows with null key parts.
+- Numeric checks: No non-numeric values, negative values, or zero values detected in audited numeric fields.
+- Leading/trailing whitespace: none detected.
+
+### `p_l_march_2021_cleaned.csv`
+
+- Columns: `sku, style_id, catalog, category, weight, tp_1, tp_2, mrp_old, final_mrp_old, ajio_mrp, amazon_mrp, amazon_fba_mrp, flipkart_mrp, limeroad_mrp, myntra_mrp, paytm_mrp, snapdeal_mrp`
+- Dtypes: `{"ajio_mrp": "float64", "amazon_fba_mrp": "float64", "amazon_mrp": "float64", "catalog": "object", "category": "object", "final_mrp_old": "float64", "flipkart_mrp": "float64", "limeroad_mrp": "float64", "mrp_old": "float64", "myntra_mrp": "float64", "paytm_mrp": "float64", "sku": "object", "snapdeal_mrp": "float64", "style_id": "object", "tp_1": "float64", "tp_2": "float64", "weight": "float64"}`
+- Exact duplicate rows: **0**
+- Candidate key `sku`: 0 duplicate rows; 0 rows with null key parts.
+- Numeric checks: No non-numeric values, negative values, or zero values detected in audited numeric fields.
+- Leading/trailing whitespace: none detected.
+
+### `sale_report_cleaned.csv`
+
+- Columns: `sku_code, design_no, stock, category, size, color`
+- Dtypes: `{"category": "object", "color": "object", "design_no": "object", "size": "object", "sku_code": "object", "stock": "float64"}`
+- Exact duplicate rows: **0**
+- Candidate key `sku_code`: 68 duplicate rows; 48 rows with null key parts.
+- Numeric checks: stock: {'nonblank': 9232, 'non_numeric_nonblank': 0, 'negative': 0, 'zero': 581}
+- Leading/trailing whitespace: none detected.
+
+## Reproducibility
+
+| Cleaned file | Result | Detail |
+|---|---|---|
+| `amazon_sale_report_cleaned.csv` | PASS | Serialized output matches the cleaner output. |
+| `cloud_warehouse_compersion_chart_cleaned.csv` | PASS | Serialized output matches the cleaner output. |
+| `expense_iigf_cleaned.csv` | PASS | Serialized output matches the cleaner output. |
+| `international_sale_report_cleaned.csv` | PASS | Serialized output matches the cleaner output. |
+| `may_2022_cleaned.csv` | PASS | Serialized output matches the cleaner output. |
+| `p_l_march_2021_cleaned.csv` | PASS | Serialized output matches the cleaner output. |
+| `sale_report_cleaned.csv` | PASS | Serialized output matches the cleaner output. |
+
+## Candidate Relationships and Merge Risk
+
+The product tables expose `sku` and the sales tables expose `sku`/`sku_code`; these are plausible SKU links, not confirmed foreign keys. Parent uniqueness must be validated before treating any merge as many-to-one.
+
+| Child | Parent | Unmatched child values |
+|---|---|---:|
+| `amazon_sale_report_cleaned.csv.sku` | `may_2022_cleaned.csv.sku` | 7,195 |
+| `amazon_sale_report_cleaned.csv.sku` | `p_l_march_2021_cleaned.csv.sku` | 7,195 |
+| `international_sale_report_cleaned.csv.sku` | `may_2022_cleaned.csv.sku` | 4,590 |
+| `international_sale_report_cleaned.csv.sku` | `p_l_march_2021_cleaned.csv.sku` | 4,590 |
+| `sale_report_cleaned.csv.sku_code` | `may_2022_cleaned.csv.sku` | 9,170 |
+| `sale_report_cleaned.csv.sku_code` | `p_l_march_2021_cleaned.csv.sku` | 9,170 |
+
+## Decision
+
+**PASS WITH WARNINGS.** The datasets are suitable for exploratory analysis with documented caveats. The main risks are missing identifiers/amounts, non-unique transaction-level keys, and SKU values that do not match the product tables. Revenue and expense amounts must not be interpreted as profit without validated cost and scope definitions.
+
+## Limitations and Unresolved Issues
+
+- The source files do not provide a confirmed data dictionary or business-approved primary keys.
+- `international_sale_report_cleaned.csv` now has 0 invalid nonblank dates. Rows with parseable month-day-year dates whose month/year agreed with `months` were formatted as `mm/dd/yyyy`; 25,110 source rows were excluded from the cleaned transaction table and remain traceable to the raw source.
+- Date fields in some source reports use ambiguous day-month formatting; date ranges are parseability checks, not business-date certification.
+- The expense and warehouse files are report extracts with summary rows and should not be joined to order lines without explicit grain rules.
+- The date correction was applied with a reproducible rule; future corrections require business-owner confirmation and before/after row-count reconciliation.
