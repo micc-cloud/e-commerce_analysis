@@ -6,6 +6,7 @@
 - Treat Amazon rows as line grain and use `COUNT(DISTINCT order_id)` for order-level denominators.
 - Do not treat `tp`, `tp_1`, or `tp_2` as cost until their business definition is confirmed.
 - Exclude or separately label cancelled/returned statuses; do not silently mix them with completed sales.
+- Current Phase 4 reported-sales outputs use the available row scope and must be labelled as reported gross measures, not completed-order sales, until an order-level status precedence rule is approved.
 
 ## Feasibility matrix
 

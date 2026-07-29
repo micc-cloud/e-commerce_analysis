@@ -37,6 +37,7 @@ The sales analytics notebook ran from top to bottom in a fresh Python process. S
 ## Assumptions and limitations
 
 - “Reported gross sales” means the sum of the available `amount` field for Amazon; it is not asserted to be net sales or profit.
+- Reported gross sales, units, and order counts use the available source rows. Cancelled and returned records were not silently reclassified or removed because no approved order-level status precedence rule exists; therefore these are not completed-order measures.
 - Amazon and international values are kept separate because the international file has no currency field and no comparable order identifier.
 - AOV is not claimed as a fully validated KPI; the notebook reports reported amount per distinct order as a clearly labelled proxy.
 - Partial months are extract-boundary months, not necessarily calendar months with missing business activity.

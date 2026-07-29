@@ -12,6 +12,8 @@
 
 **Limitation**  Net sales is unavailable because discount, refund, and return-value fields are not present.
 
+**Status-scope warning**  Reported gross sales, units, and order counts use the available rows; cancelled or returned records are not removed because no approved order-level status precedence rule exists. These figures must not be presented as completed-order sales.
+
 ## Orders, units, and selling-price measures
 
 **Observation**  Amazon contains `120,378` distinct orders and `116,646` reported units. The reported amount per distinct order is `652.86`, and the amount-per-unit measure is `673.75`.
@@ -63,5 +65,6 @@
 ## Explicit exclusions
 
 - Net sales, profit, gross margin, customer metrics, true return rate, fulfilment rate, and inventory turnover are not calculated.
+- Reported sales measures are not completed-order measures; cancelled and returned records may remain in the source scope until an approved order-level status rule is defined.
 - No causal conclusion is drawn from time or dimension comparisons.
 - Partial months are not compared as complete months.
