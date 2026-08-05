@@ -7,6 +7,7 @@
 - Do not treat `tp`, `tp_1`, or `tp_2` as cost until their business definition is confirmed.
 - Exclude or separately label cancelled/returned statuses; do not silently mix them with completed sales.
 - Current Phase 4 reported-sales outputs use the available row scope and must be labelled as reported gross measures, not completed-order sales, until an order-level status precedence rule is approved.
+- Phase 4–5 also expose `delivered_status_proxy`, defined only as `status = 'Shipped - Delivered to Buyer'`; it is a sensitivity scope and must not be called completed sales without business approval.
 
 ## Feasibility matrix
 

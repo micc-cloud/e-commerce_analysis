@@ -75,6 +75,7 @@ Floating-point display differences were below 0.01 and came from numeric represe
 - `NULLIF` protects order-value and percentage denominators from zero.
 - Cancelled and returned records are represented as labelled status proxies; they are not silently netted into a true net-sales calculation.
 - Month-over-month calculations partition by the single monthly series and use the previous month via `LAG`.
+- Status-scoped sales views now expose both `reported_source` and `delivered_status_proxy`; the proxy is the exact `Shipped - Delivered to Buyer` label and is not treated as a completed-sales rule.
 
 ## Assumptions and limitations
 
@@ -83,6 +84,7 @@ Floating-point display differences were below 0.01 and came from numeric represe
 - The product join is a candidate SKU enrichment; unmatched SKUs remain unmatched.
 - Warehouse and expense tables have no confirmed sales key and are not allocated to orders.
 - True return rate, refunds, profit, margin, customer metrics, inventory turnover, delivery time, and SLA metrics remain unsupported by Phase 1 definitions.
+- Amount coverage is status-sensitive; cancelled rows have materially lower amount completeness than delivered-status-proxy rows.
 - The database is a local derived artifact and is reproducible by running `scripts/run_sql_layer.py` from the repository root.
 
 ## Final status

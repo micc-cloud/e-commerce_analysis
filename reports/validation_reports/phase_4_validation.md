@@ -4,46 +4,33 @@
 
 **PASS WITH WARNINGS**
 
-The sales analytics notebook ran from top to bottom in a fresh Python process. Supported gross-value, order, unit, time-trend, contribution, and descriptive segment measures were reconciled. Net sales and profitability remain explicitly out of scope.
-
-## Environment and dependencies
-
-- Python 3.10.14 analysis runtime
-- pandas 2.3.3
-- matplotlib 3.10.8
-- DuckDB 1.5.5
-- Existing DuckDB database: `data/processed/ecommerce.duckdb`
-- No new project dependency was added to `requirements.txt`.
+Phase 4 now reports both the complete `reported_source` scope and an explicit `delivered_status_proxy` sensitivity scope. The latter is not labelled completed sales because no business-approved status rule exists.
 
 ## Files inspected and changed
 
-- Inspected: `PROJECT_RULES.md`, `docs/kpi_definition.md`, `reports/validation_reports/phase_3_validation.md`, cleaned CSVs, and Phase 3 SQL outputs.
-- Created: `notebooks/03_sales_analytics.ipynb`, `reports/sales_findings.md`, `reports/validation_reports/phase_4_validation.md`, and `tests/test_phase_4_sales.py`.
-- The cleaned datasets were not modified.
+- Inspected Phase 0–3 reports, KPI definitions, cleaned sales files, SQL layer, and existing Phase 4 code.
+- Changed `sql/02_sales_analysis.sql`, `scripts/build_sales_analytics_notebook.py`, `notebooks/03_sales_analytics.ipynb`, `src/status_scope.py`, `tests/test_phase_3_sql.py`, `tests/test_phase_4_sales.py`, and this report.
+- Changed `reports/sales_findings.md`.
+- Cleaned and raw source files were not modified.
 
 ## Validation performed
 
-- The notebook was executed sequentially in a fresh Python process; all 32 cells completed without errors.
-- Amazon reported amount reconciled to DuckDB: `78,590,043.30`.
-- Amazon distinct orders reconciled to DuckDB: `120,378`.
-- Amazon units reconciled to DuckDB: `116,646`.
-- International gross amount reconciled to DuckDB: `10,834,927.19`.
-- Order counts use distinct `order_id`; line counts are shown separately.
-- MoM growth uses a guarded denominator and suppresses comparisons involving partial March and June boundary months. May versus April is `-9.06%`.
-- Category and attributed-SKU concentration shares each sum to 100% within their own denominator.
-- Top five category and SKU results were independently reproduced with direct pandas group-bys.
-- No outliers were removed. Daily IQR screening flagged no days above the calculated upper bound.
+- Rebuilt and replayed all 32 notebook cells sequentially in a fresh Python process: **PASS**.
+- Reported-source SQL reconciliation: amount `78,590,043.30`, orders `120,378`, units `116,646`: **PASS**.
+- Delivered-status-proxy reconciliation: amount `18,650,815.00`, orders `26,566`, units `28,886`: **PASS**.
+- Amount coverage was reported by status, month, category, and scope: **PASS**.
+- Distinct-order logic and line counts remain separate: **PASS**.
+- Partial-month MoM suppression remains active: **PASS**.
+- Net sales and formal AOV remain excluded: **PASS**.
 
-## Assumptions and limitations
+## Important limitations
 
-- “Reported gross sales” means the sum of the available `amount` field for Amazon; it is not asserted to be net sales or profit.
-- Reported gross sales, units, and order counts use the available source rows. Cancelled and returned records were not silently reclassified or removed because no approved order-level status precedence rule exists; therefore these are not completed-order measures.
-- Amazon and international values are kept separate because the international file has no currency field and no comparable order identifier.
-- AOV is not claimed as a fully validated KPI; the notebook reports reported amount per distinct order as a clearly labelled proxy.
-- Partial months are extract-boundary months, not necessarily calendar months with missing business activity.
-- Shipping geography is descriptive and does not support customer-level analysis.
-- The notebook was replayed programmatically rather than through a Jupyter kernel because the runtime has no registered Jupyter kernelspec; sequential execution still covered every cell.
+- `delivered_status_proxy` is the exact `Shipped - Delivered to Buyer` status, not a confirmed completed-sales definition.
+- Reported-source figures include cancelled and return-related rows by design for traceability.
+- Amount coverage is approximately 94% overall and materially lower for cancelled rows.
+- International data remains separate because currency and order IDs are unavailable.
+- The Amazon period is short and has partial boundary months.
 
 ## Final status
 
-**PASS WITH WARNINGS**: suitable for supported sales analysis with the limitations above. Do not use the outputs for net sales, profitability, customer analytics, true return rate, or inventory turnover.
+**PASS WITH WARNINGS**: suitable for scoped descriptive sales analysis. Business approval is still required before selecting an executive completed-sales rule.

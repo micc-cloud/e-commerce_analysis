@@ -1,79 +1,56 @@
 # Phase 5 Product Analytics Findings
 
-## Product scope and mapping
+## Scope and mapping
 
-**Observation**  Amazon product performance can be analysed within the sales source, but product-price and stock enrichment cannot be safely joined to Amazon sales.
+**Observation**  Product contribution and ABC use the explicit `delivered_status_proxy` scope; reported-source status totals remain separate.
 
-**Evidence**  Amazon contains 7,195 distinct SKUs. The May and March product snapshots each contain 1,330 unique SKUs, but no Amazon SKU matches either snapshot. The stock report has 9,170 non-null `sku_code` values and five duplicate SKU keys.
+**Evidence**  The proxy uses exact status `Shipped - Delivered to Buyer` and contains `28,769` lines. Amazon has `4,430` distinct SKUs in this scope, while the May and March product snapshots each have `1,330` unique SKUs. Exact Amazon-to-snapshot matches remain `0`.
 
-**Interpretation**  The source systems use different SKU formats or populations. Product-price and stock results must remain separate source views.
+**Interpretation**  Product results are within-source Amazon results and are not enriched with price or stock snapshots.
 
-**Business implication**  Establish a governed SKU crosswalk before using price or inventory data to explain sales performance.
+**Business implication**  Create a governed SKU crosswalk before using price or inventory data to explain sales performance.
 
-**Limitation**  No cross-source product enrichment, inventory coverage, or price linkage is claimed.
+**Limitation**  The delivered status is a proxy, not an approved completed-order definition.
 
-## Category performance
+## Category and SKU performance
 
-**Observation**  Reported Amazon amount is concentrated in a small number of categories.
+**Observation**  Within the delivered-status proxy, Set contributes `47.2%`, kurta `25.3%`, and Western Dress `20.7%` of reported amount.
 
-**Evidence**  Set contributes `49.9%` and kurta `27.1%` of reported amount. Together they contribute `76.98%`; the top three categories contribute `91.25%`.
+**Evidence**  Category and SKU totals reconcile directly to the delivered-status-proxy sales scope. The leading proxy SKUs are JNE3797-KR-L, JNE3797-KR-M, SET183-KR-DH-M, JNE3797-KR-S, and JNE3797-KR-XL.
 
-**Interpretation**  The observed sales portfolio is category-concentrated within the Amazon window.
+**Interpretation**  The results describe status-scoped commercial contribution, not profitability.
 
-**Business implication**  Prioritise availability, catalogue quality, and status review for Set and kurta before making assortment decisions.
+**Business implication**  Prioritise status, catalogue, and availability review for high-contribution variants.
 
-**Limitation**  Reported amount is not profit, and cancelled/returned rows were not removed because no approved order-level status precedence rule exists.
+**Limitation**  Amount is not net sales, and no cost or margin data exists.
 
-## SKU, style, and size performance
+## Pareto and reported-sales ABC
 
-**Observation**  The highest reported-amount SKUs are J0230-SKD-M, JNE3797-KR-L, J0230-SKD-S, JNE3797-KR-M, and JNE3797-KR-S. The highest style is JNE3797, while M, L, and XL are the leading sizes by reported amount.
+**Observation**  ABC is explicitly a reported-sales classification, not inventory or profitability ABC.
 
-**Evidence**  SKU, style, and size tables use direct Amazon group-bys with reported amount, units, line count, and distinct orders.
+**Evidence**  Class A is cumulative contribution through 80%, B is greater than 80% through 95%, and C is greater than 95%. The delivered proxy produces `1,433` A-class SKUs, `1,453` B-class SKUs, and `1,544` C-class SKUs; cumulative shares end at 100%.
 
-**Interpretation**  The results describe commercial contribution and variant mix within the 91-day observed window.
+**Interpretation**  The classification identifies status-scoped sales concentration only.
 
-**Business implication**  Use the leading variants for availability and catalogue checks, then test whether the pattern persists over a longer history.
+**Business implication**  Use A products for availability and data-quality review; treat C products as investigation candidates.
 
-**Limitation**  Amazon has no colour field, and no product lifecycle or launch-date field is available.
+**Limitation**  No cost, lifecycle, demand forecast, dated inventory, or service-level fields support automatic rationalisation.
 
-## Pareto and ABC classification
+## Low-volume and status concentration
 
-**Observation**  ABC classification identifies 1,973 A-class SKUs, 2,143 B-class SKUs, and 3,079 C-class SKUs using explicit reported-amount thresholds.
+**Observation**  Low-amount SKUs and cancellation/return concentrations are displayed as review signals.
 
-**Evidence**  Class A is cumulative contribution through 80%, B is greater than 80% through 95%, and C is greater than 95%. Cumulative contribution ends at 100% for both SKU and category tables.
+**Evidence**  Low-volume review is limited to the observed March 31 to June 26 proxy window. Cancelled and return-related records are calculated from the full reported source for status investigation.
 
-**Interpretation**  ABC is a reported-sales concentration tool, not a profitability or inventory-service classification.
+**Interpretation**  Low volume is not evidence of slow movement, and status concentration is not a true rate.
 
-**Business implication**  Begin portfolio review with A-class availability and data quality, and investigate C-class products for lifecycle, stock, strategic-role, and demand evidence.
+**Business implication**  Check lifecycle, availability, listing quality, returns, margin, and strategic role before any rationalisation decision.
 
-**Limitation**  No cost, margin, demand forecast, lifecycle, or service-level data exists to support automatic rationalisation.
+**Limitation**  No product is labelled slow-moving, unprofitable, discontinued, or a true stockout.
 
-## Low-volume and rationalisation candidates
+## Stock and mapping limitations
 
-**Observation**  Some SKUs have zero reported amount or very low observed contribution.
-
-**Evidence**  The notebook presents the lowest reported-amount SKUs within the same 91-day window and retains their units and line counts.
-
-**Interpretation**  These are low-volume review candidates, not slow-moving products.
-
-**Business implication**  Check launch date, stock availability, listing quality, returns, margin, and strategic role before any product removal decision.
-
-**Limitation**  The dataset does not provide a defensible lifecycle or longer demand window, so no product is labelled slow-moving, unprofitable, or discontinued.
-
-## Status and stock indicators
-
-**Observation**  Cancellation and return-related records can be concentrated by category, while the stock snapshot contains zero-stock rows by category.
-
-**Evidence**  Status concentration is shown using descriptive line counts, units, and reported amounts. The stock snapshot reports `242,386` stock units and zero-stock rows by stock category, including `205` for KURTA and `114` for KURTA SET.
-
-**Interpretation**  These are investigation signals, not cancellation/return rates or stockout rates.
-
-**Business implication**  Review status rules and create a dated, governed stock-to-sales key before making availability or rationalisation decisions.
-
-**Limitation**  Stock has no snapshot date and `sku_code` is non-unique; mixed line statuses require order-level precedence.
-
-## Explicit exclusions
-
-- No product is labelled unprofitable, slow-moving, discontinued, or a true stockout.
-- No Amazon sales-to-price or sales-to-stock join is used.
-- No colour-sales analysis is performed because Amazon has no colour field.
+- Stock is a separate undated snapshot with five duplicate non-null `sku_code` keys.
+- No sales-to-stock join or stockout rate is calculated.
+- Amazon has no colour field; colour analysis is limited to the separate stock snapshot.
+- Shared non-null MRP fields between March and May had no conflicting values, but their business definitions are unconfirmed.

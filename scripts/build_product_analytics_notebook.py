@@ -21,7 +21,7 @@ cells = [
 
 Evaluate SKU, category, variant, contribution, Pareto, ABC, status concentration, and separate stock-snapshot indicators using only supported fields.
 
-**Scope control:** Amazon sales and the stock/product snapshots are analysed within source. The Amazon SKU format does not match the product-price snapshot SKU format, so no cross-source enrichment is assumed."""),
+**Scope control:** Amazon sales and the stock/product snapshots are analysed within source. Product tables use the explicitly labelled `delivered_status_proxy` scope; reported-source status totals remain separate. The Amazon SKU format does not match the product-price snapshot SKU format, so no cross-source enrichment is assumed."""),
     code(
         "from pathlib import Path",
         "import numpy as np",
@@ -33,6 +33,7 @@ Evaluate SKU, category, variant, contribution, Pareto, ABC, status concentration
         "except ImportError:",
         "    def display(*objects):",
         "        for obj in objects: print(obj)",
+        "from src.status_scope import add_status_scope",
         "ROOT = Path.cwd()",
         "if not (ROOT / 'data').exists(): ROOT = Path.cwd().parent",
         "amazon = pd.read_csv(ROOT / 'data/cleaned/amazon_sale_report_cleaned.csv', low_memory=False)",
@@ -42,6 +43,10 @@ Evaluate SKU, category, variant, contribution, Pareto, ABC, status concentration
         "amazon['date'] = pd.to_datetime(amazon['date'], errors='coerce')",
         "for col in ['qty', 'amount']: amazon[col] = pd.to_numeric(amazon[col], errors='coerce')",
         "stock['stock'] = pd.to_numeric(stock['stock'], errors='coerce')",
+        "amazon = add_status_scope(amazon)",
+        "reported_amazon = amazon.copy()",
+        "amazon = amazon[amazon['is_delivered_status_proxy']].copy()",
+        "print('Primary product scope: delivered_status_proxy rows:', len(amazon), '| reported-source rows:', len(reported_amazon))",
         "print('Loaded:', amazon.shape, may_products.shape, march_products.shape, stock.shape)",
     ),
     md("""## 1. Data validation summary
@@ -186,13 +191,13 @@ Evaluate SKU, category, variant, contribution, Pareto, ABC, status concentration
 
 **Limitation:** Mixed line statuses require an order-level precedence rule; stock has no date and its `sku_code` is non-unique."""),
     code(
-        "cancelled = amazon[amazon['status'].eq('Cancelled')].groupby('category').agg(lines=('status', 'size'), units=('qty', 'sum'), reported_amount=('amount', 'sum')).sort_values('lines', ascending=False)",
-        "return_labels = amazon[amazon['status'].str.contains('Return', case=False, na=False)]",
+        "cancelled = reported_amazon[reported_amazon['status'].eq('Cancelled')].groupby('category').agg(lines=('status', 'size'), units=('qty', 'sum'), reported_amount=('amount', 'sum')).sort_values('lines', ascending=False)",
+        "return_labels = reported_amazon[reported_amazon['status'].str.contains('Return', case=False, na=False)]",
         "returned_by_category = return_labels.groupby('category').agg(lines=('status', 'size'), units=('qty', 'sum'), reported_amount=('amount', 'sum')).sort_values('lines', ascending=False)",
         "stock_category = stock.groupby('category', dropna=False).agg(stock_units=('stock', 'sum'), rows=('category', 'size'), zero_stock_rows=('stock', lambda s: (s == 0).sum())).sort_values('stock_units', ascending=False)",
         "display(cancelled.head(10), returned_by_category.head(10), stock_category)",
-        "assert cancelled['lines'].sum() == int(amazon['status'].eq('Cancelled').sum())",
-        "assert returned_by_category['lines'].sum() == int(amazon['status'].str.contains('Return', case=False, na=False).sum())",
+        "assert cancelled['lines'].sum() == int(reported_amazon['status'].eq('Cancelled').sum())",
+        "assert returned_by_category['lines'].sum() == int(reported_amazon['status'].str.contains('Return', case=False, na=False).sum())",
     ),
     md("""## 8. Potential portfolio rationalisation opportunities
 

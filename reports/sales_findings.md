@@ -1,70 +1,55 @@
 # Phase 4 Sales Analytics Findings
 
-## Reported sales scope
+## Scope and data quality
 
-**Observation**  Amazon and international sales provide separate reported gross-value scopes.
+**Observation**  Amazon sales are reported in two explicit scopes: `reported_source` and `delivered_status_proxy`.
 
-**Evidence**  Amazon reported amount is INR-coded and totals `78,590,043.30`; international reported gross amount totals `10,834,927.19` but has no currency field.
+**Evidence**  The delivered proxy is the exact status `Shipped - Delivered to Buyer` and contains `28,769` lines, `26,566` distinct orders, `28,886` units, and `18,650,815.00` reported amount. The complete source contains `128,969` lines and `120,378` distinct orders.
 
-**Interpretation**  The sources must not be added to one company-wide sales total without currency and scope controls.
+**Interpretation**  The delivered scope is a status proxy, not a confirmed completed-sales definition. It is provided to show status sensitivity without silently deleting source rows.
 
-**Business implication**  Use source-specific reporting packs and reconcile currencies before cross-source comparisons.
+**Business implication**  Use the source scope for traceability and the delivered proxy for controlled sensitivity analysis until a business-approved status rule exists.
 
-**Limitation**  Net sales is unavailable because discount, refund, and return-value fields are not present.
+**Limitation**  Cancelled and returned records remain in the reported source scope; no net-sales fields exist.
 
-**Status-scope warning**  Reported gross sales, units, and order counts use the available rows; cancelled or returned records are not removed because no approved order-level status precedence rule exists. These figures must not be presented as completed-order sales.
+## Amount coverage
 
-## Orders, units, and selling-price measures
+**Observation**  Amount completeness varies materially by status and period.
 
-**Observation**  Amazon contains `120,378` distinct orders and `116,646` reported units. The reported amount per distinct order is `652.86`, and the amount-per-unit measure is `673.75`.
+**Evidence**  Amazon amount coverage is approximately `94%` overall, approximately `59%` for cancelled rows, and approximately `100%` for delivered-status-proxy rows. Coverage is also reported by month and category in the notebook.
 
-**Evidence**  These figures reconcile to the DuckDB monthly sales output and use distinct `order_id` for order counts. International has `16,294` pieces and an amount-per-piece measure of `664.96`, but no order identifier.
+**Interpretation**  Amount-based comparisons may be status-sensitive and are not necessarily missing at random.
 
-**Interpretation**  Order counts and line-item units answer different questions. The order-value figure is a reported-value-per-distinct-order measure, not a fully validated AOV.
+**Business implication**  Include coverage beside every amount-based KPI and investigate missing cancelled amounts before executive reporting.
 
-**Business implication**  Keep distinct orders, units, and amount-per-unit measures separate in management reporting.
+**Limitation**  Missing amount values cannot be recovered from the available files.
 
-**Limitation**  Amount is line-grain, status treatment is not an approved completed-order rule, and net adjustments are unavailable.
+## Orders, units, and price measures
+
+**Observation**  Amazon reported-source totals are `120,378` distinct orders and `116,646` units. The delivered-status proxy contains `26,566` distinct orders and `28,886` units.
+
+**Evidence**  SQL and pandas reconcile both scopes. Amount-per-unit and amount-per-distinct-order are explicitly labelled reported measures; true AOV is not calculated.
+
+**Interpretation**  Order-level and line-level measures remain distinct, and status scope materially changes the result.
+
+**Business implication**  Present reported-source and status-proxy measures side by side rather than calling either one net sales or confirmed AOV.
+
+**Limitation**  `amount` is line-level and discounts, refunds, returns, taxes, and shipping adjustments are unavailable.
 
 ## Time trends and growth
 
-**Observation**  Amazon reported amount is `28,838,708.32` in April, `26,225,004.75` in May, and `23,424,646.38` in June. May is down `9.06%` against April on a comparable complete-month basis.
+**Observation**  Reported-source Amazon amount is `28,838,708.32` in April and `26,225,004.75` in May; comparable May versus April growth is `-9.06%`.
 
-**Evidence**  March 31 and June 29 are extract boundaries. March and June are labelled partial; MoM is suppressed whenever the current or prior month is partial. The first period has no prior denominator.
+**Evidence**  March and June are partial extract months. Growth is suppressed whenever the current or previous month is partial.
 
-**Interpretation**  The data supports period monitoring, but not a reliable seasonal pattern claim.
+**Interpretation**  The data supports short-window monitoring, not seasonality conclusions.
 
-**Business implication**  Use complete-month comparisons for growth decisions and obtain a longer, consistently bounded history for seasonal planning.
+**Business implication**  Use complete-month comparisons and obtain longer, consistently bounded history.
 
-**Limitation**  Only four Amazon calendar months are available, and raw boundary-month changes are not decision-grade growth rates.
-
-## Category and SKU contribution
-
-**Observation**  The top five categories contribute `99.1%` of reported Amazon amount. The top five attributed SKUs contribute `3.0%` of the attributed-SKU amount scope.
-
-**Evidence**  The leading categories are Set, kurta, Western Dress, Top, and Ethnic Dress. The leading SKUs are J0230-SKD-M, JNE3797-KR-L, J0230-SKD-S, JNE3797-KR-M, and JNE3797-KR-S. Both concentration denominators sum to 100%, and the top-five results were independently reproduced by direct group-bys.
-
-**Interpretation**  Category mix is highly concentrated while SKU-level amount is more distributed across the available attributed-SKU scope.
-
-**Business implication**  Prioritise availability, status, and catalogue-quality checks for high-contribution categories and products.
-
-**Limitation**  Concentration is not profitability, and missing or unmatched SKU values limit SKU coverage.
-
-## Channel, B2B, and geography
-
-**Observation**  B2B reported amount is `591,220.79`, approximately `0.75%` of Amazon reported amount. The largest shipping-state amounts are Maharashtra, Karnataka, and Telangana.
-
-**Evidence**  The notebook groups reported amount, units, and distinct orders by `sales_channel`, `b2b`, and `ship_state`.
-
-**Interpretation**  These are descriptive Amazon segment views, not evidence that a channel or geography caused performance differences.
-
-**Business implication**  Use these dimensions to frame operational and data-quality questions.
-
-**Limitation**  International data lacks comparable channel, B2B, and currency fields; shipping state is not a customer identifier.
+**Limitation**  The Amazon extract covers only March 31 through June 29, 2022.
 
 ## Explicit exclusions
 
-- Net sales, profit, gross margin, customer metrics, true return rate, fulfilment rate, and inventory turnover are not calculated.
-- Reported sales measures are not completed-order measures; cancelled and returned records may remain in the source scope until an approved order-level status rule is defined.
+- Net sales, true AOV, profit, margin, customer metrics, true return rate, fulfilment rate, and inventory turnover are not calculated.
 - No causal conclusion is drawn from time or dimension comparisons.
-- Partial months are not compared as complete months.
+- International sales remain separate because currency and order identifiers are unavailable.

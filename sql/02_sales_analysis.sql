@@ -12,6 +12,7 @@ WITH monthly AS (
     GROUP BY 1
 )
 SELECT
+    'reported_source' AS analysis_scope,
     sales_month,
     reported_amount,
     reported_units,
@@ -22,6 +23,54 @@ SELECT
     100.0 * (reported_amount - LAG(reported_amount) OVER (ORDER BY sales_month))
         / NULLIF(LAG(reported_amount) OVER (ORDER BY sales_month), 0) AS amount_change_mom_pct
 FROM monthly;
+
+CREATE OR REPLACE VIEW amazon_status_scoped_sales AS
+SELECT
+    *,
+    CASE
+        WHEN LOWER(status) = 'cancelled' THEN 'cancelled'
+        WHEN LOWER(status) LIKE '%return%' THEN 'return_related'
+        WHEN status = 'Shipped - Delivered to Buyer' THEN 'delivered_status_proxy'
+        ELSE 'other_status'
+    END AS status_group,
+    status = 'Shipped - Delivered to Buyer' AS is_delivered_status_proxy
+FROM amazon_sales;
+
+CREATE OR REPLACE VIEW amazon_monthly_sales_scoped AS
+WITH scoped AS (
+    SELECT
+        'reported_source' AS analysis_scope,
+        DATE_TRUNC('month', CAST(date AS DATE)) AS sales_month,
+        SUM(CAST(amount AS DOUBLE)) AS reported_amount,
+        SUM(CAST(qty AS DOUBLE)) AS reported_units,
+        COUNT(DISTINCT order_id) AS distinct_orders,
+        COUNT(*) AS line_count
+    FROM amazon_status_scoped_sales
+    GROUP BY 1, 2
+    UNION ALL
+    SELECT
+        'delivered_status_proxy' AS analysis_scope,
+        DATE_TRUNC('month', CAST(date AS DATE)) AS sales_month,
+        SUM(CAST(amount AS DOUBLE)) AS reported_amount,
+        SUM(CAST(qty AS DOUBLE)) AS reported_units,
+        COUNT(DISTINCT order_id) AS distinct_orders,
+        COUNT(*) AS line_count
+    FROM amazon_status_scoped_sales
+    WHERE is_delivered_status_proxy
+    GROUP BY 1, 2
+)
+SELECT
+    analysis_scope,
+    sales_month,
+    reported_amount,
+    reported_units,
+    distinct_orders,
+    line_count,
+    reported_amount / NULLIF(distinct_orders, 0) AS reported_value_per_distinct_order,
+    reported_amount - LAG(reported_amount) OVER (PARTITION BY analysis_scope ORDER BY sales_month) AS amount_change_mom,
+    100.0 * (reported_amount - LAG(reported_amount) OVER (PARTITION BY analysis_scope ORDER BY sales_month))
+        / NULLIF(LAG(reported_amount) OVER (PARTITION BY analysis_scope ORDER BY sales_month), 0) AS amount_change_mom_pct
+FROM scoped;
 
 CREATE OR REPLACE VIEW international_monthly_sales AS
 SELECT

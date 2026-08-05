@@ -3,6 +3,8 @@ import unittest
 
 import pandas as pd
 
+from src.status_scope import add_status_scope
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -13,6 +15,8 @@ class Phase5ProductTests(unittest.TestCase):
         cls.amazon = pd.read_csv(ROOT / "data/cleaned/amazon_sale_report_cleaned.csv", low_memory=False)
         cls.amazon["amount"] = pd.to_numeric(cls.amazon["amount"], errors="coerce")
         cls.amazon["qty"] = pd.to_numeric(cls.amazon["qty"], errors="coerce")
+        cls.amazon = add_status_scope(cls.amazon)
+        cls.delivered = cls.amazon[cls.amazon["is_delivered_status_proxy"]]
         cls.may = pd.read_csv(ROOT / "data/cleaned/may_2022_cleaned.csv", low_memory=False)
         cls.march = pd.read_csv(ROOT / "data/cleaned/p_l_march_2021_cleaned.csv", low_memory=False)
         cls.stock = pd.read_csv(ROOT / "data/cleaned/sale_report_cleaned.csv", low_memory=False)
@@ -34,6 +38,11 @@ class Phase5ProductTests(unittest.TestCase):
         self.assertAlmostEqual(self.amazon.groupby("sku")["amount"].sum().sum(), total, places=2)
         self.assertAlmostEqual(self.amazon.groupby("category")["amount"].sum().sum(), total, places=2)
         self.assertAlmostEqual(self.amazon.groupby("sku")["qty"].sum().sum(), self.amazon["qty"].sum(), places=2)
+
+    def test_delivered_scope_product_totals_reconcile(self):
+        total = self.delivered["amount"].sum()
+        self.assertAlmostEqual(self.delivered.groupby("sku")["amount"].sum().sum(), total, places=2)
+        self.assertAlmostEqual(self.delivered.groupby("category")["amount"].sum().sum(), total, places=2)
 
     def test_pareto_and_abc_thresholds(self):
         values = self.amazon.groupby("sku")["amount"].sum().sort_values(ascending=False)
