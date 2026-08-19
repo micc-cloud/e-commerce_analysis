@@ -1,10 +1,14 @@
 -- Sales analysis stays within source and currency boundaries.
+-- `reported_amount` is a source-reported field; NULL amounts are not imputed.
 
 CREATE OR REPLACE VIEW amazon_monthly_sales AS
 WITH monthly AS (
     SELECT
         DATE_TRUNC('month', CAST(date AS DATE)) AS sales_month,
         SUM(CAST(amount AS DOUBLE)) AS reported_amount,
+        COUNT(amount) AS amount_lines,
+        COUNT(*) FILTER (WHERE CAST(amount AS DOUBLE) = 0) AS zero_amount_lines,
+        COUNT(*) FILTER (WHERE CAST(qty AS DOUBLE) = 0) AS zero_quantity_lines,
         SUM(CAST(qty AS DOUBLE)) AS reported_units,
         COUNT(DISTINCT order_id) AS distinct_orders,
         COUNT(*) AS line_count
@@ -15,9 +19,13 @@ SELECT
     'reported_source' AS analysis_scope,
     sales_month,
     reported_amount,
+    amount_lines,
+    line_count,
+    100.0 * amount_lines / NULLIF(line_count, 0) AS amount_coverage_pct,
+    zero_amount_lines,
+    zero_quantity_lines,
     reported_units,
     distinct_orders,
-    line_count,
     reported_amount / NULLIF(distinct_orders, 0) AS reported_value_per_distinct_order,
     reported_amount - LAG(reported_amount) OVER (ORDER BY sales_month) AS amount_change_mom,
     100.0 * (reported_amount - LAG(reported_amount) OVER (ORDER BY sales_month))
@@ -42,6 +50,9 @@ WITH scoped AS (
         'reported_source' AS analysis_scope,
         DATE_TRUNC('month', CAST(date AS DATE)) AS sales_month,
         SUM(CAST(amount AS DOUBLE)) AS reported_amount,
+        COUNT(amount) AS amount_lines,
+        COUNT(*) FILTER (WHERE CAST(amount AS DOUBLE) = 0) AS zero_amount_lines,
+        COUNT(*) FILTER (WHERE CAST(qty AS DOUBLE) = 0) AS zero_quantity_lines,
         SUM(CAST(qty AS DOUBLE)) AS reported_units,
         COUNT(DISTINCT order_id) AS distinct_orders,
         COUNT(*) AS line_count
@@ -52,6 +63,9 @@ WITH scoped AS (
         'delivered_status_proxy' AS analysis_scope,
         DATE_TRUNC('month', CAST(date AS DATE)) AS sales_month,
         SUM(CAST(amount AS DOUBLE)) AS reported_amount,
+        COUNT(amount) AS amount_lines,
+        COUNT(*) FILTER (WHERE CAST(amount AS DOUBLE) = 0) AS zero_amount_lines,
+        COUNT(*) FILTER (WHERE CAST(qty AS DOUBLE) = 0) AS zero_quantity_lines,
         SUM(CAST(qty AS DOUBLE)) AS reported_units,
         COUNT(DISTINCT order_id) AS distinct_orders,
         COUNT(*) AS line_count
@@ -63,9 +77,13 @@ SELECT
     analysis_scope,
     sales_month,
     reported_amount,
+    amount_lines,
+    line_count,
+    100.0 * amount_lines / NULLIF(line_count, 0) AS amount_coverage_pct,
+    zero_amount_lines,
+    zero_quantity_lines,
     reported_units,
     distinct_orders,
-    line_count,
     reported_amount / NULLIF(distinct_orders, 0) AS reported_value_per_distinct_order,
     reported_amount - LAG(reported_amount) OVER (PARTITION BY analysis_scope ORDER BY sales_month) AS amount_change_mom,
     100.0 * (reported_amount - LAG(reported_amount) OVER (PARTITION BY analysis_scope ORDER BY sales_month))
@@ -111,6 +129,8 @@ FROM order_status;
 
 CREATE OR REPLACE VIEW amazon_platform_performance AS
 SELECT
+    'reported_source' AS analysis_scope,
+    'source_local_channel_mix' AS metric_type,
     sales_channel,
     fulfilment,
     COUNT(*) AS line_count,

@@ -17,13 +17,13 @@ DuckDB is used because the repository has no PostgreSQL setup. SQL files are exe
 
 ## Supported SQL analyses
 
-- `amazon_monthly_sales`: reported amount, reported units, distinct orders, line count, safe AOV-style denominator, and month-over-month amount change using `LAG`.
+- `amazon_monthly_sales` and `amazon_monthly_sales_scoped`: reported amount, amount coverage, zero amount/quantity counts, reported units, distinct orders, line count, safe reported-value-per-order denominator, and month-over-month amount change using `LAG`.
 - `international_monthly_sales`: reported gross amount and pieces by month, kept separate because currency is absent.
 - `amazon_status_analysis`: distinct-order status proxies for cancelled, returned, and delivered labels using explicit `CASE WHEN` logic.
-- `amazon_platform_performance`: channel/fulfilment mix using line and distinct-order counts.
+- `amazon_platform_performance`: source-local channel/fulfilment mix using line and distinct-order counts; it is not a cross-platform performance KPI.
 - `amazon_category_performance` and `amazon_sku_performance`: category/SKU rankings using window functions.
 - `amazon_product_match_summary`: left-join match coverage to the May product snapshot.
-- `amazon_fulfilment_performance`, `warehouse_provider_comparison`, and `stock_snapshot_summary`: operational descriptive summaries.
+- `amazon_fulfilment_performance`, `warehouse_provider_comparison`, and `stock_snapshot_summary`: source-local operational/reference summaries; no warehouse or expense allocation is performed.
 
 ## Guardrails
 
