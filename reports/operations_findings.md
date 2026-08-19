@@ -1,67 +1,106 @@
 # Phase 7 Operations Analytics Findings
 
-## Order-level denominator and status distribution
+## Scope and denominator
 
-**Observation**  Amazon contains `128,969` line records and `120,378` distinct orders. No order contains multiple status values in the cleaned file.
+**Observation**  Amazon operations analysis contains 128,969 line records and
+120,378 distinct order IDs.
 
-**Evidence**  The notebook reconciles line counts and distinct-order counts by raw status and builds all rates from the distinct-order table.
+**Evidence**  Line-level status composition is reported separately from
+order-level presence flags. Order-level proxy denominators use distinct
+`order_id`.
 
-**Interpretation**  Order-level deduplication is currently stable, but the absence of mixed statuses is a source observation rather than a business definition.
+**Interpretation**  The data supports descriptive status composition, not an
+official operational-rate layer.
 
-**Business implication**  Operational reporting can use distinct order IDs for denominators while retaining line-level status distributions.
+**Business implication**  Use the outputs to identify status-definition,
+event-history, and process-data priorities.
 
-**Limitation**  Status labels are not a validated lifecycle model.
+**Limitation**  Status labels have no event timestamps or approved lifecycle
+precedence rule.
 
-## Status proxy rates
+## Mixed-status orders: governance finding
 
-**Observation**  Using all `120,378` distinct Amazon orders as the denominator, the cancellation status proxy is `14.28%`, return status proxy is `1.65%`, shipped status proxy is `85.01%`, and delivered status proxy is `22.07%`.
+**Observation**  The analysis explicitly checks whether one order contains
+multiple line statuses and never assigns a mixed order to a single status.
 
-**Evidence**  Cancellation means exact `Cancelled`; return means any status containing `Return`; shipped means any status beginning `Shipped`; delivered means exact `Shipped - Delivered to Buyer`.
+**Evidence**  The order table stores all status values, a `status_count`, and
+the label `MIXED_STATUS_REQUIRES_RULE` whenever `status_count > 1`. The current
+cleaned Amazon extract contains 0 mixed-status orders, but the check and detail
+table are retained for future extracts. A future order such as Shipped +
+Cancelled would remain unresolved rather than being labelled Cancelled or
+Shipped.
 
-**Interpretation**  These measures describe source status composition, not true cancellation, return, fulfilment, or delivery rates.
+**Interpretation**  The absence of mixed statuses is an observed property of
+this extract, not evidence that a business precedence rule exists.
 
-**Business implication**  Use them to prioritise status-definition and operational-process review.
+**Business implication**  Obtain an approved order-status precedence rule and
+event-level status history before producing official cancellation, return, or
+delivery outcomes.
 
-**Limitation**  No approved status precedence, return quantity, refund value, delivery timestamp, or SLA denominator exists.
+**Limitation**  No line-status event history, transition timestamp, or
+returned/refunded quantity is available.
 
-## Fulfilment and courier mix
+## Status composition proxies
 
-**Observation**  Amazon fulfilment labels show `84,002` distinct orders for Amazon fulfilment and `36,376` for Merchant fulfilment. Courier labels are also reported at line and distinct-order grain.
+**Observation**  Source-status proxies are calculated over all 120,378 distinct
+Amazon orders: cancelled 17,185 (14.28%), return-related 1,981 (1.65%),
+shipped 102,339 (85.01%), and delivered-status proxy 26,566 (22.07%).
 
-**Evidence**  The notebook reports `fulfilment`, `fulfilled_by`, and `courier_status` distributions without converting labels into speed or service-level measures.
+**Evidence**  Cancellation is exact `Cancelled`; return-related contains
+`Return`; shipped begins with `Shipped`; delivered is exact
+`Shipped - Delivered to Buyer`. Each is an order-level presence flag.
 
-**Interpretation**  These are operational mix indicators only.
+**Interpretation**  These figures describe source-status composition only.
 
-**Business implication**  Use them to identify data-quality and process-review areas, especially missing courier or provider labels.
+**Business implication**  Use them to prioritise status taxonomy and event-data
+quality review.
 
-**Limitation**  No valid delivery-date or timestamp field exists, so delivery duration, on-time delivery, and courier-speed ranking are excluded.
+**Limitation**  They are not validated cancellation, return, fulfilment, or
+delivery rates and must not be presented as such.
 
-## Platform and category differences
+## Time, category, SKU, geography, and B2B/B2C
 
-**Observation**  Amazon.in represents `120,254` distinct orders, while Non-Amazon represents `124`; category populations also vary substantially.
+**Observation**  Status composition can be compared across time, categories,
+SKUs, shipping states, and B2B/B2C groups using explicit group denominators.
 
-**Evidence**  Platform and category tables include distinct-order denominators and a `1,000`-order analytical sample flag. Non-Amazon and smaller categories are labelled `small_sample_review_only`.
+**Evidence**  Time tables use distinct orders by observed month. Category,
+SKU, geography, and B2B tables are built at `order_id + dimension` grain,
+avoiding an unsafe order-to-category or order-to-SKU merge. Each table reports
+distinct orders, line counts, proxy counts, proxy rates, and sample flags.
 
-**Interpretation**  Differences may be driven by product mix, status mix, or sample size; no causal platform or category ranking is made.
+**Interpretation**  Group differences may reflect product mix, sample size, or
+status capture rather than an operational cause.
 
-**Business implication**  Focus comparisons on sufficiently observed groups and treat small groups as directional review candidates.
+**Business implication**  Investigate sufficiently observed groups with process
+owners and collect event-level timestamps, status transition reasons, and
+product-mix controls.
 
-**Limitation**  Channel definitions are source labels, not independently verified operational systems.
+**Limitation**  Small groups are directional only. Multi-category and
+multi-SKU orders mean group distinct-order totals can legitimately overlap and
+must not be summed as a source-wide order total.
 
-## High-risk review candidates
+## Fulfilment and courier fields
 
-**Observation**  Some categories and SKUs have higher status-proxy rates than the overall source population.
+**Observation**  Fulfilment, provider, and courier labels are available as
+source mix indicators, but fulfilment comparison is skipped when only one
+meaningful value is present.
 
-**Evidence**  The notebook flags groups with at least `100` distinct orders and above-overall cancellation or return status-proxy rates.
+**Evidence**  The notebook reports line and distinct-order counts by
+`fulfilment`, `fulfilled_by`, and `courier_status`, without ranking speed.
 
-**Interpretation**  These are operational review candidates, not confirmed high-risk failures.
+**Interpretation**  Labels do not establish delivery duration or service level.
 
-**Business implication**  Validate product mix, listing conditions, status capture, and fulfilment processes with business owners before action.
+**Business implication**  Collect order-created, shipped, delivered, and
+return-event timestamps before evaluating operational speed.
 
-**Limitation**  No financial impact, root cause, service-level target, or causal evidence is available.
+**Limitation**  No delivery time, processing time, SLA, on-time delivery, or
+courier-speed metric is supported.
 
-## Warehouse comparison exclusion
+## Explicit exclusions
 
-- Warehouse provider rates are standalone reference rows with no order ID, SKU, date, or transaction key.
-- They are not linked to fulfilment performance or ranked as operational outcomes.
-- Delivery duration, SLA compliance, true cancellation rate, true return rate, and courier speed are not calculated.
+- Official cancellation, return, fulfilment, delivery, or SLA rates.
+- Any invented order-status precedence rule.
+- Delivery or processing duration and courier-speed ranking.
+- Warehouse or expense attribution to orders; no safe transaction key exists.
+- Predictive use of status or courier fields.
+- Causal operational explanations or performance rankings.
