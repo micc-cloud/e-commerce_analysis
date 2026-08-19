@@ -1,4 +1,4 @@
-# E-Commerce Business Intelligence & Profit Optimization
+# E-Commerce Business Intelligence & Performance Analytics
 
 ## Project Overview
 
