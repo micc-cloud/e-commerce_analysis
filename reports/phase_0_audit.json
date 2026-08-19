@@ -55,7 +55,7 @@
         "b2b": "bool",
         "fulfilled_by": "object"
       },
-      "memory_bytes": 176894775,
+      "memory_bytes": 194237491,
       "date_checks": [
         {
           "column": "date",
@@ -1062,7 +1062,7 @@
         "shiprocket_price_per_unit": "float64",
         "increff_price_per_unit": "float64"
       },
-      "memory_bytes": 476,
+      "memory_bytes": 504,
       "date_checks": [],
       "mandatory_fields_missing": [],
       "duplicate_rows": 0,
@@ -1125,7 +1125,7 @@
         "particular": "object",
         "amount": "int64"
       },
-      "memory_bytes": 3998,
+      "memory_bytes": 4498,
       "date_checks": [],
       "mandatory_fields_missing": [],
       "duplicate_rows": 0,
@@ -1227,7 +1227,7 @@
         "rate": "float64",
         "gross_amt": "float64"
       },
-      "memory_bytes": 4557081,
+      "memory_bytes": 5138269,
       "date_checks": [
         {
           "column": "date",
@@ -1814,7 +1814,7 @@
         "paytm_mrp": "float64",
         "snapdeal_mrp": "float64"
       },
-      "memory_bytes": 426784,
+      "memory_bytes": 469340,
       "date_checks": [],
       "mandatory_fields_missing": [],
       "duplicate_rows": 0,
@@ -2212,7 +2212,7 @@
         "paytm_mrp": "float64",
         "snapdeal_mrp": "float64"
       },
-      "memory_bytes": 437402,
+      "memory_bytes": 479958,
       "date_checks": [],
       "mandatory_fields_missing": [],
       "duplicate_rows": 0,
@@ -2594,7 +2594,7 @@
         "size": "object",
         "color": "object"
       },
-      "memory_bytes": 2635102,
+      "memory_bytes": 3003858,
       "date_checks": [],
       "mandatory_fields_missing": [],
       "duplicate_rows": 0,

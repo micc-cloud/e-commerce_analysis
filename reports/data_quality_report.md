@@ -12,13 +12,13 @@
 
 | File | Rows | Columns | Memory | Date range |
 |---|---:|---:|---:|---|
-| `amazon_sale_report_cleaned.csv` | 128,969 | 22 | 168.70 MB | 2022-03-31T00:00:00 to 2022-06-29T00:00:00 |
+| `amazon_sale_report_cleaned.csv` | 128,969 | 22 | 185.24 MB | 2022-03-31T00:00:00 to 2022-06-29T00:00:00 |
 | `cloud_warehouse_compersion_chart_cleaned.csv` | 4 | 3 | 0.00 MB | No date field |
 | `expense_iigf_cleaned.csv` | 21 | 4 | 0.00 MB | No date field |
-| `international_sale_report_cleaned.csv` | 12,322 | 9 | 4.35 MB | 2021-06-05T00:00:00 to 2022-05-11T00:00:00 |
-| `may_2022_cleaned.csv` | 1,330 | 16 | 0.41 MB | No date field |
-| `p_l_march_2021_cleaned.csv` | 1,330 | 17 | 0.42 MB | No date field |
-| `sale_report_cleaned.csv` | 9,233 | 6 | 2.51 MB | No date field |
+| `international_sale_report_cleaned.csv` | 12,322 | 9 | 4.90 MB | 2021-06-05T00:00:00 to 2022-05-11T00:00:00 |
+| `may_2022_cleaned.csv` | 1,330 | 16 | 0.45 MB | No date field |
+| `p_l_march_2021_cleaned.csv` | 1,330 | 17 | 0.46 MB | No date field |
+| `sale_report_cleaned.csv` | 9,233 | 6 | 2.86 MB | No date field |
 
 ## Schema, Types, and Validation Findings
 

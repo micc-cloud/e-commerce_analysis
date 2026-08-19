@@ -21,13 +21,13 @@ transaction treatment.
 
 ## Files inspected
 
-- `data/cleaned/amazon_sales_cleaned.csv`
-- `data/cleaned/international_sales_cleaned.csv`
-- `data/cleaned/may_product_master_cleaned.csv`
-- `data/cleaned/march_product_master_cleaned.csv`
-- `data/cleaned/warehouse_comparison_cleaned.csv`
+- `data/cleaned/amazon_sale_report_cleaned.csv`
+- `data/cleaned/international_sale_report_cleaned.csv`
+- `data/cleaned/may_2022_cleaned.csv`
+- `data/cleaned/p_l_march_2021_cleaned.csv`
+- `data/cleaned/cloud_warehouse_compersion_chart_cleaned.csv`
 - `data/cleaned/expense_iigf_cleaned.csv`
-- `data/cleaned/stock_report_cleaned.csv`
+- `data/cleaned/sale_report_cleaned.csv`
 
 ## Files created
 

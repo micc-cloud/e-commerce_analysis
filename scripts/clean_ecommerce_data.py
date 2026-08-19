@@ -60,9 +60,11 @@ def to_number(series: pd.Series) -> pd.Series:
 
 
 def parse_date_series(series: pd.Series) -> pd.Series:
-    parsed = pd.to_datetime(series, errors="coerce", dayfirst=False)
-    if parsed.notna().sum() == 0:
-        parsed = pd.to_datetime(series, errors="coerce", dayfirst=True)
+    # The supplied sales extracts use month-day-year dates. Try that format
+    # first so ambiguous numeric dates cannot be silently interpreted as DMY.
+    parsed = pd.to_datetime(series, format="%m-%d-%y", errors="coerce")
+    for date_format in ("%Y-%m-%d", "%m/%d/%Y", "%d-%m-%y"):
+        parsed = parsed.fillna(pd.to_datetime(series, format=date_format, errors="coerce"))
     return parsed.dt.strftime("%Y-%m-%d").astype("string")
 
 

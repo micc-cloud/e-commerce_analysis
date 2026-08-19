@@ -2,6 +2,24 @@
 
 This dictionary describes only fields present in the cleaned CSV files. “Likely business meaning” is an interpretation for analysis planning, not a confirmed source-system definition.
 
+## Governance notes
+
+- The Amazon and international raw date strings are month-day-year (`%m-%d-%y`).
+  The cleaned international `date` is displayed as `mm/dd/yyyy` and is
+  retained only when its month/year agrees with `months`.
+- `amount` and `gross_amt` are reported monetary fields. Missing Amazon
+  `amount` is preserved; it is not treated as zero or imputed.
+- Zero `qty`, zero `amount`, and negative expense values are observations that
+  require source/business interpretation. They are not silently removed.
+- Amazon is an order-line table without a line identifier. `order_id` is a
+  candidate order key only and repeats by design.
+- `sku`, `sku_code`, category, style, and size links across files are candidate
+  relationships. Exact Amazon-to-product-snapshot SKU match is currently zero.
+- `tp`, `tp_1`, and `tp_2` are reference fields with undefined business
+  meaning; they must not be treated as COGS or product cost.
+- Warehouse and expense tables are report/reference grains without transaction
+  keys, reliable dates, or currency. They cannot be allocated to sales.
+
 ## `amazon_sale_report_cleaned.csv`
 
 **Grain:** one Amazon sales/order line record. `order_id` repeats across lines and is not a row key.
@@ -49,7 +67,7 @@ This dictionary describes only fields present in the cleaned CSV files. “Likel
 
 ## `may_2022_cleaned.csv`
 
-**Grain:** one SKU/size product-price row, apparently a May 2022 price snapshot. `sku` is unique in this file.
+**Grain:** one SKU snapshot row, apparently from May 2022. `sku` is unique in this file. This is not a transaction table and `tp` is not assumed to be cost.
 
 | Field | Type | Plain-language meaning | Likely business meaning | Limitations | Permitted analytical use |
 |---|---|---|---|---|---|
@@ -72,7 +90,7 @@ This dictionary describes only fields present in the cleaned CSV files. “Likel
 
 ## `p_l_march_2021_cleaned.csv`
 
-**Grain:** one SKU/size product-price row, apparently a March 2021 price/cost snapshot. `sku` is unique in this file.
+**Grain:** one SKU snapshot row, apparently from March 2021. `sku` is unique in this file. This is not a transaction table and `tp_1`/`tp_2` are not assumed to be cost.
 
 | Field | Type | Plain-language meaning | Likely business meaning | Limitations | Permitted analytical use |
 |---|---|---|---|---|---|
@@ -96,7 +114,7 @@ This dictionary describes only fields present in the cleaned CSV files. “Likel
 
 ## `sale_report_cleaned.csv`
 
-**Grain:** one inventory SKU/size/colour row, likely a stock snapshot. `sku_code` is not unique.
+**Grain:** one inventory SKU/size/colour row, likely an undated stock snapshot. `sku_code` is not unique and is not a reliable one-row-per-SKU key.
 
 | Field | Type | Plain-language meaning | Likely business meaning | Limitations | Permitted analytical use |
 |---|---|---|---|---|---|
