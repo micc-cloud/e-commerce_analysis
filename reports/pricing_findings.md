@@ -1,58 +1,126 @@
 # Phase 6 Pricing Analytics Findings
 
-## Observed selling-price proxy
+## Scope and definition
 
-**Observation**  A line-level unit-price proxy is available for delivered-status-proxy Amazon rows with INR currency, populated amount, and positive quantity.
+**Observation**  Pricing analysis is restricted to Amazon rows in the exact
+`Shipped - Delivered to Buyer` `delivered_status_proxy` scope.
 
-**Evidence**  The valid population contains `28,761` rows. Median reported amount per unit is `629 INR`; the mean is approximately `645.82 INR`. Zero unit-price rows total `716`; no negative unit prices were observed.
+**Evidence**  A reported unit-price proxy is calculated only where `amount` is
+present, `qty > 0`, and `currency == INR`, using `amount / qty` at line grain.
+The valid population contains 28,761 lines and 28,886 units.
 
-**Interpretation**  The distribution describes reported amount per unit within the exact `Shipped - Delivered to Buyer` status proxy.
+**Interpretation**  The proxy describes reported amount per unit within one
+source and status convention.
 
-**Business implication**  Use the measure for price-quality monitoring and investigation, not as a confirmed net realised price.
+**Business implication**  Use the results for price-quality monitoring and
+follow-up investigation, not as confirmed realised selling-price guidance.
 
-**Limitation**  Amount is line-level, status is a proxy, and promotion/discount values are unavailable.
+**Limitation**  `amount` is not validated net revenue or realised selling
+price; 8 delivered-proxy rows have missing amount and 8 have non-positive
+quantity. The full Amazon source has 7,792 missing amounts.
 
-## Platform reference-price differences
+## Unit-price distribution
 
-**Observation**  Platform-labelled MRP/reference prices vary for some product snapshot rows.
+**Observation**  The typical reported unit-price proxy is 629 INR at the
+median and 645.82 INR at the mean.
 
-**Evidence**  In the May snapshot, `1,293` rows have at least two platform values and `266` rows have a non-zero range across the eight platform-labelled MRP fields. The largest observed row range is `800 INR`.
+**Evidence**  Valid unit-price rows contain 716 zero-price observations and no
+negative unit-price observations. Zero-amount rows are retained as anomalies,
+not removed.
 
-**Interpretation**  These are catalogue reference-price differences within a product snapshot, not realised marketplace price differences.
+**Interpretation**  The mean being above the median indicates a higher-priced
+tail in this observed population, but does not establish customer response.
 
-**Business implication**  Review catalogue governance and platform-price maintenance for rows with large reference-price ranges.
+**Business implication**  Investigate zero-amount lines and high-price lines
+with the source owner before using this proxy in pricing decisions.
 
-**Limitation**  Platform field definitions, timing, and commercial comparability are not confirmed. MRP is not cost.
+**Limitation**  No approved anomaly threshold, discount value, promotion value,
+or causal design is available.
 
-## Price variation by SKU and category
+## Time variation
 
-**Observation**  SKU and category unit-price distributions differ within the delivered-status proxy.
+**Observation**  The median proxy rises across the observed interior months:
+568 INR in April, 648 INR in May, and 725 INR in June.
 
-**Evidence**  The notebook reports median, mean, minimum, maximum, range, line count, and units by SKU and category.
+**Evidence**  Valid-price lines by month are March 16, April 12,075, May
+10,399, and June 6,271. March and June are partial boundary periods; the
+notebook labels them and does not treat this as seasonality.
 
-**Interpretation**  Variation may reflect product mix, size, promotions, status, or data quality; it does not establish elasticity or an optimal price.
+**Interpretation**  Monthly differences may reflect product mix, status
+composition, or incomplete coverage rather than price effects.
 
-**Business implication**  Use high-variation groups as candidates for source and catalogue review.
+**Business implication**  Use month-level changes as a monitoring signal for
+catalogue and source-quality review.
 
-**Limitation**  No causal design or repeated controlled price experiment exists.
+**Limitation**  The Amazon data covers only 91 observed dates, so no
+seasonality, elasticity, or causal price-volume conclusion is supported.
 
-## Price bands and anomalies
+## SKU and category variation
 
-**Observation**  Most valid-price rows fall in the `[500,1000)` INR analytical band.
+**Observation**  Reported unit-price distributions vary by source-local SKU
+and category.
 
-**Evidence**  The mutually exclusive bands contain: `[0,500)` `10,053` lines, `[500,1000)` `15,831`, `[1000,2000)` `2,870`, and `[2000,inf)` `7`.
+**Evidence**  The notebook reports median, mean, minimum, maximum, range,
+valid line count, and units for each SKU and category. High-variation SKU
+review is restricted to groups with at least 5 valid lines; for example,
+`J0280-SKD-M` has a 1,556 INR observed range across 21 lines.
 
-**Interpretation**  The bands describe observed volume distribution only.
+**Interpretation**  Within-SKU variation can reflect zero amounts, product
+mix, size, status, promotions, or data-quality issues.
 
-**Business implication**  Use bands for monitoring and sample review rather than price recommendations.
+**Business implication**  Prioritise high-variation SKUs for catalogue,
+promotion, and transaction-quality investigation.
 
-**Limitation**  Band boundaries are analytical thresholds, not business-approved pricing tiers.
+**Limitation**  Amazon SKUs have zero exact matches to the May/March product
+snapshots, so no MRP or listed-price enrichment is valid.
 
-## Discount and listed-price exclusions
+## Price bands and volume
 
-- Discount amount and discount percentage are not calculated.
-- Selling price versus MRP is not calculated because Amazon-to-May product SKU matches are `0`.
-- High-discount products cannot be identified from `promotion_ids` alone.
-- No price increase or elasticity recommendation is made.
-- Amazon and international price fields are not combined because international currency is unavailable.
-- No profit or margin conclusion is made from price alone.
+**Observation**  Most valid-price lines fall in the `[500,1000)` INR band.
+
+**Evidence**  Mutually exclusive bands contain: `[0,500)` 10,053 lines and
+10,104 units; `[500,1000)` 15,831 lines and 15,895 units; `[1000,2000)` 2,870
+lines and 2,880 units; `[2000,inf)` 7 lines and 7 units. Reported gross amount
+is shown separately by band.
+
+**Interpretation**  These bands describe observed volume distribution only.
+
+**Business implication**  Use bands for monitoring and sample review, not for
+optimal-price or demand recommendations.
+
+**Limitation**  Band boundaries are analytical thresholds, not approved
+commercial price tiers.
+
+## B2B/B2C, geography, and fulfilment
+
+**Observation**  B2B lines have a higher median proxy than B2C lines, while
+fulfilment cannot be compared across groups.
+
+**Evidence**  B2B has 249 valid lines, 685 INR median, and 705.48 INR mean;
+B2C has 28,512 lines, 629 INR median, and 645.29 INR mean. The valid population
+contains one fulfilment value, `Merchant`, so no fulfilment comparison is
+reported. Geographic tables report sample sizes; small states must be treated
+cautiously.
+
+**Interpretation**  These are descriptive source-local differences and may be
+driven by product mix or sample size.
+
+**Business implication**  Use adequately sized B2B/B2C and state groups as
+areas for further investigation, not as pricing recommendations.
+
+**Limitation**  No causal, elasticity, or optimal-price claim is made; the
+fulfilment dimension has no comparison group and international currency is
+unavailable.
+
+## Explicit exclusions
+
+- Discount amount and discount percentage.
+- Amazon selling-price versus MRP, because exact Amazon-to-snapshot SKU match
+  is zero.
+- High-discount product identification from `promotion_ids` alone.
+- Profit, margin, cost, price elasticity, causal price-volume analysis, and
+  specific price recommendations.
+- Cross-currency or international monetary price aggregation.
+
+All extreme values were investigated with an IQR flag and retained. No source
+or cleaned dataset was modified.
