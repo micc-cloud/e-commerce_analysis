@@ -1,104 +1,37 @@
-# E-Commerce Business Intelligence & Profit Optimization
+# E-Commerce Analysis
 
-## Project Overview
+## Project Summary
 
-This project is an end-to-end business analytics case study for a multi-channel e-commerce operation. It simulates the work of a Business Analyst/Data Analyst supporting management decisions around revenue growth, profitability, product performance, pricing, and operations.
+This repository contains a business-focused e-commerce analytics workflow based on cleaned CSV datasets. The work covers data-quality validation, exploratory analysis, and insight generation for commercial and operational decision-making.
 
-Rather than treating the dataset only as a dashboard exercise, the project follows a full business analytics workflow: business understanding, data preparation, exploratory analysis, KPI design, dashboard development, and business recommendations.
+## What Was Completed
 
-## Business Problem
-
-The company sells products through multiple online channels. Management wants to understand:
-
-- Which channels and products generate the strongest revenue and profit
-- Which products sell well but have weak margins
-- Whether pricing differs meaningfully across platforms
-- How cancellations and fulfilment issues affect performance
-- Where the business should focus to improve profitability
-
-## Dataset
-
-This project uses the **Unlock Profits with E-Commerce Sales Data** dataset from Kaggle.
-
-The dataset contains multiple business-related tables, including:
-
-- Sales transactions
-- Product information
-- Pricing data
-- Profit & Loss reports
-- Warehouse information
-- Expense and operational data
-
-Because the data comes from different sources, an important first step is cleaning, standardizing, and preparing the files for analysis.
-
-## Current Scope
-
-- Raw dataset extraction
-- Data cleaning and standardization
-- Data quality profiling
-- Cleaned CSV outputs for analysis
-- Reproducible cleaning script
-
-## Tools & Technologies
-
-- Python
-- Pandas
-- SQL
-- Power BI
-- Git & GitHub
-
-## Project Workflow
-
-1. Business Understanding
-2. Data Understanding
-3. Data Preparation
-4. Exploratory Data Analysis
-5. KPI Framework
-6. Sales Analytics
-7. Product Analytics
-8. Pricing Analytics
-9. Operations Analytics
-10. Profitability Analytics
-11. Dashboard Development
-12. Business Recommendations
-
-## Key Business KPIs
-
-- Revenue
-- Profit
-- Gross Margin
-- Net Margin
-- Average Order Value
-- Order Cancellation Rate
-- Fulfilment Rate
-- Product Profitability
-- Sales Growth
-
-## Project Structure
-
-```text
-data/
-  raw/          Original extracted source CSVs
-  cleaned/      Analysis-ready cleaned CSVs
-reports/        Data quality report and cleaned dataset package
-scripts/        Reproducible data cleaning pipeline
-```
+- Reviewed the cleaned datasets and verified their basic reliability.
+- Performed a structured data-quality assessment covering duplicates, missing values, and suspicious values.
+- Built a reusable Python-based exploratory analysis workflow using Pandas, NumPy, Matplotlib, Plotly, and Seaborn.
+- Organized the analysis around business questions such as:
+  - which products or categories are driving performance,
+  - whether pricing and quantity patterns are stable,
+  - where missing or unreliable data may affect conclusions,
+  - and which areas should be prioritized for deeper business analysis.
 
 ## Key Outputs
 
-- `reports/data_quality_report.md`
-- `reports/data_quality_profile.json`
-- `reports/cleaned_ecommerce_datasets.zip`
-- `scripts/clean_ecommerce_data.py`
+- Cleaned datasets in the data/cleaned folder
+- Data quality documentation in the reports folder
+- Exploratory analysis workflow in the scripts folder
+- Business-focused EDA visuals and summaries in the reports/eda_outputs folder
 
-## Next Steps
+## How to Run the Analysis
 
-- Build the analytical data model
-- Define KPI calculations
-- Perform sales, product, pricing, supply chain, and profitability analysis
-- Create a Power BI executive dashboard
-- Develop final business recommendations using:
+1. Install the required Python packages:
+   pip install pandas numpy matplotlib seaborn plotly
 
-```text
-Observation -> Insight -> Recommendation -> Expected Business Impact
-```
+2. Run the analysis script from the repository root:
+   python scripts/EDA.py
+
+3. Review the generated outputs in the reports/eda_outputs folder.
+
+## Business Focus
+
+The analysis is designed to support operational and commercial decisions rather than only to visualize data. The next stage should concentrate on revenue contribution, profitability, product-level performance, and supply-chain or fulfillment reliability.
