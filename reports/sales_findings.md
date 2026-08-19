@@ -2,54 +2,92 @@
 
 ## Scope and data quality
 
-**Observation**  Amazon sales are reported in two explicit scopes: `reported_source` and `delivered_status_proxy`.
+**Observation** Amazon reported sales are presented in a complete source scope and a delivered-status proxy scope. International sales remain separate.
 
-**Evidence**  The delivered proxy is the exact status `Shipped - Delivered to Buyer` and contains `28,769` lines, `26,566` distinct orders, `28,886` units, and `18,650,815.00` reported amount. The complete source contains `128,969` lines and `120,378` distinct orders.
+**Evidence** Amazon has 128,969 lines, 120,378 distinct orders, 116,646 reported units, and `78,590,043.30` reported gross amount. Amount coverage is 93.96% (121,177 populated rows). The delivered-status proxy has 28,769 lines, 26,566 distinct orders, 28,886 units, `18,650,815.00` reported gross amount, and 99.97% amount coverage.
 
-**Interpretation**  The delivered scope is a status proxy, not a confirmed completed-sales definition. It is provided to show status sensitivity without silently deleting source rows.
+**Interpretation** The delivered scope is an analytical status convention, not a completed-sales definition. The reported-source scope is retained for source traceability.
 
-**Business implication**  Use the source scope for traceability and the delivered proxy for controlled sensitivity analysis until a business-approved status rule exists.
+**Business implication** Use both scopes for sensitivity review and show amount coverage alongside every monetary result.
 
-**Limitation**  Cancelled and returned records remain in the reported source scope; no net-sales fields exist.
+**Limitation** `amount` is not validated revenue or net sales. Missing values, cancellations, returns, discounts, refunds, taxes, and shipping adjustments are not resolved.
 
 ## Amount coverage
 
-**Observation**  Amount completeness varies materially by status and period.
+**Observation** Amount completeness varies by status and period.
 
-**Evidence**  Amazon amount coverage is approximately `94%` overall, approximately `59%` for cancelled rows, and approximately `100%` for delivered-status-proxy rows. Coverage is also reported by month and category in the notebook.
+**Evidence** Overall Amazon coverage is 93.96%; cancelled-line coverage is approximately 59%, while delivered-status-proxy coverage is approximately 99.97%. The notebook reports coverage by status, date grain, month, category, SKU, channel, B2B flag, geography, and fulfilment.
 
-**Interpretation**  Amount-based comparisons may be status-sensitive and are not necessarily missing at random.
+**Interpretation** Amount-based comparisons may be status-sensitive and missingness cannot be assumed random.
 
-**Business implication**  Include coverage beside every amount-based KPI and investigate missing cancelled amounts before executive reporting.
+**Business implication** Investigate missing amount records before using reported gross amount for operational decisions.
 
-**Limitation**  Missing amount values cannot be recovered from the available files.
+**Limitation** The source provides no rule for interpreting missing amount as zero, cancelled, unavailable, or another business state.
 
-## Orders, units, and price measures
+## Time trends and month-over-month change
 
-**Observation**  Amazon reported-source totals are `120,378` distinct orders and `116,646` units. The delivered-status proxy contains `26,566` distinct orders and `28,886` units.
+**Observation** Reported Amazon amount was `28,838,708.32` in April 2022 and `26,225,004.75` in May 2022, a comparable change of `-9.06%`.
 
-**Evidence**  SQL and pandas reconcile both scopes. Amount-per-unit and amount-per-distinct-order are explicitly labelled reported measures; true AOV is not calculated.
+**Evidence** March 31 is a partial opening period and June 1–June 29 is a partial closing period. The notebook suppresses comparisons where either the current or previous month is partial.
 
-**Interpretation**  Order-level and line-level measures remain distinct, and status scope materially changes the result.
+**Interpretation** The extract supports short-window monitoring only.
 
-**Business implication**  Present reported-source and status-proxy measures side by side rather than calling either one net sales or confirmed AOV.
+**Business implication** Use complete-month comparisons for reporting and obtain longer consistently bounded history for planning.
 
-**Limitation**  `amount` is line-level and discounts, refunds, returns, taxes, and shipping adjustments are unavailable.
+**Limitation** The 91 observed Amazon dates cover only 2022-03-31 to 2022-06-29. No seasonality or forecasting claim is made.
 
-## Time trends and growth
+## Category contribution
 
-**Observation**  Reported-source Amazon amount is `28,838,708.32` in April and `26,225,004.75` in May; comparable May versus April growth is `-9.06%`.
+**Observation** Within the delivered-status proxy, Set, kurta, and Western Dress are the largest reported gross amount categories.
 
-**Evidence**  March and June are partial extract months. Growth is suppressed whenever the current or previous month is partial.
+**Evidence** Their reported amounts are `8,800,562`, `4,715,208`, and `3,868,616`, respectively. The top five categories account for approximately 99.18% of the delivered-status-proxy amount scope.
 
-**Interpretation**  The data supports short-window monitoring, not seasonality conclusions.
+**Interpretation** The result describes concentration within an analytical status scope, not completed sales or profitability.
 
-**Business implication**  Use complete-month comparisons and obtain longer, consistently bounded history.
+**Business implication** Review availability and status composition for leading categories before making assortment or planning decisions.
 
-**Limitation**  The Amazon extract covers only March 31 through June 29, 2022.
+**Limitation** Cross-source category mappings are not governed and amount is not net sales.
+
+## SKU contribution and concentration
+
+**Observation** The leading delivered-status-proxy SKUs are `JNE3797-KR-L`, `JNE3797-KR-M`, `SET183-KR-DH-M`, `JNE3797-KR-S`, and `JNE3797-KR-XL`.
+
+**Evidence** Their reported amounts are `295,061`, `260,255`, `197,316`, `188,905`, and `174,942`. Together they represent approximately 5.99% of the SKU-attributed delivered-status-proxy amount scope.
+
+**Interpretation** This is a reported sales concentration signal, not a profitability or demand ranking.
+
+**Business implication** These variants merit stock and fulfilment review; low contribution alone is not evidence for rationalisation.
+
+**Limitation** Product snapshot SKU matches remain unavailable, and no cost, lifecycle, or dated inventory data exists.
+
+## B2B and source-local dimensions
+
+**Observation** The Amazon extract contains B2C (`b2b=False`) and B2B (`b2b=True`) flags, plus channel, fulfilment, and shipping-state fields.
+
+**Evidence** In the reported-source scope, B2C has `77,998,822.51` reported amount across 119,584 distinct orders, while B2B has `591,220.79` across 794 distinct orders. Amazon fulfilment labels show `54,319,516.00` for Amazon and `24,270,527.30` for Merchant reported amount. The leading shipping states are Maharashtra, Karnataka, Telangana, Uttar Pradesh, and Tamil Nadu.
+
+**Interpretation** These are source-local mix comparisons, not full platform, customer, or causal performance analyses.
+
+**Business implication** Use the dimensions for descriptive segmentation and data-quality follow-up.
+
+**Limitation** International data has no comparable B2B, platform, order, or currency fields. Geography is shipping geography, not a customer identifier.
+
+## Status composition
+
+**Observation** Amazon contains cancellation-, return-, delivery-, and other status labels.
+
+**Evidence** Distinct-order status proxies include 17,185 orders with a cancelled label, 1,981 with a return-related label, and 26,566 with the exact delivered-status proxy.
+
+**Interpretation** These figures describe source-status composition only.
+
+**Business implication** Use them to prioritise lifecycle-definition and operational data-quality review.
+
+**Limitation** They are not official cancellation, return, or fulfilment rates. No approved status precedence, return quantity, refund value, or event timestamp exists.
 
 ## Explicit exclusions
 
-- Net sales, true AOV, profit, margin, customer metrics, true return rate, fulfilment rate, and inventory turnover are not calculated.
-- No causal conclusion is drawn from time or dimension comparisons.
-- International sales remain separate because currency and order identifiers are unavailable.
+- Validated net sales, refund-adjusted sales, profit, margin, and customer KPIs.
+- Official cancellation, return, fulfilment, delivery, or SLA rates.
+- Inventory or stockout KPIs.
+- Cross-currency aggregation of Amazon and international amounts.
+- Seasonality, forecasting, causal, or price-elasticity claims.
