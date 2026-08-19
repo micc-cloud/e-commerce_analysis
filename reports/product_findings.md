@@ -2,55 +2,124 @@
 
 ## Scope and mapping
 
-**Observation**  Product contribution and ABC use the explicit `delivered_status_proxy` scope; reported-source status totals remain separate.
+**Observation** Product contribution and ABC use Amazon's exact
+`delivered_status_proxy` scope. Reported-source totals remain separate.
 
-**Evidence**  The proxy uses exact status `Shipped - Delivered to Buyer` and contains `28,769` lines. Amazon has `4,430` distinct SKUs in this scope, while the May and March product snapshots each have `1,330` unique SKUs. Exact Amazon-to-snapshot matches remain `0`.
+**Evidence** The proxy contains 28,769 lines, 26,566 distinct orders, 28,886
+units, and `18,650,815.00` reported gross amount. It contains 4,430 distinct
+Amazon SKUs with 99.97% amount coverage. May and March product snapshots each
+contain 1,330 unique SKUs; exact Amazon-to-snapshot matches are zero.
 
-**Interpretation**  Product results are within-source Amazon results and are not enriched with price or stock snapshots.
+**Interpretation** Product metrics are source-local Amazon results. No price,
+MRP, or stock enrichment is assumed.
 
-**Business implication**  Create a governed SKU crosswalk before using price or inventory data to explain sales performance.
+**Business implication** Obtain a governed SKU crosswalk before using product
+master or stock data to explain sales performance.
 
-**Limitation**  The delivered status is a proxy, not an approved completed-order definition.
+**Limitation** The delivered status is an analytical proxy, not an approved
+completed-order rule; source systems may use different SKU definitions.
 
-## Category and SKU performance
+## Category, SKU, and variant contribution
 
-**Observation**  Within the delivered-status proxy, Set contributes `47.2%`, kurta `25.3%`, and Western Dress `20.7%` of reported amount.
+**Observation** Set, kurta, and Western Dress lead delivered-status-proxy
+reported gross amount. The leading SKUs are `JNE3797-KR-L`, `JNE3797-KR-M`,
+`SET183-KR-DH-M`, `JNE3797-KR-S`, and `JNE3797-KR-XL`.
 
-**Evidence**  Category and SKU totals reconcile directly to the delivered-status-proxy sales scope. The leading proxy SKUs are JNE3797-KR-L, JNE3797-KR-M, SET183-KR-DH-M, JNE3797-KR-S, and JNE3797-KR-XL.
+**Evidence** Category reported amounts are `8,800,562`, `4,715,208`, and
+`3,868,616`. The leading five SKU amounts are `295,061`, `260,255`, `197,316`,
+`188,905`, and `174,942`. SKU, category, style, and size calculations use
+source-local mappings with distinct order counts and amount coverage.
 
-**Interpretation**  The results describe status-scoped commercial contribution, not profitability.
+**Interpretation** These results describe reported commercial contribution in a
+status-proxy scope, not profitability or demand.
 
-**Business implication**  Prioritise status, catalogue, and availability review for high-contribution variants.
+**Business implication** Review high-contribution variants for availability,
+catalogue quality, and status composition.
 
-**Limitation**  Amount is not net sales, and no cost or margin data exists.
+**Limitation** `amount` is reported gross amount, not net sales; no cost,
+lifecycle, dated inventory, or demand history exists.
 
-## Pareto and reported-sales ABC
+## Reported Gross Amount ABC and Pareto
 
-**Observation**  ABC is explicitly a reported-sales classification, not inventory or profitability ABC.
+**Observation** ABC classifications can be calculated from descending
+delivered-status-proxy reported gross amount.
 
-**Evidence**  Class A is cumulative contribution through 80%, B is greater than 80% through 95%, and C is greater than 95%. The delivered proxy produces `1,433` A-class SKUs, `1,453` B-class SKUs, and `1,544` C-class SKUs; cumulative shares end at 100%.
+**Evidence** The declared thresholds are A through cumulative share `<=80%`, B
+above 80% through `<=95%`, and C above 95%. The SKU classification contains
+1,433 A SKUs, 1,453 B SKUs, and 1,544 C SKUs. Cumulative contribution is
+monotonic and ends at 100%.
 
-**Interpretation**  The classification identifies status-scoped sales concentration only.
+**Interpretation** This is **Reported Gross Amount ABC**, not inventory,
+profit, demand, or lifecycle ABC.
 
-**Business implication**  Use A products for availability and data-quality review; treat C products as investigation candidates.
+**Business implication** Use A-class products for first-pass availability and
+data-quality review; treat C-class products as review candidates only.
 
-**Limitation**  No cost, lifecycle, demand forecast, dated inventory, or service-level fields support automatic rationalisation.
+**Limitation** No automatic rationalisation, discontinuation, or slow-moving
+decision is justified by this classification.
 
-## Low-volume and status concentration
+## Sales concentration and B2B/B2C mix
 
-**Observation**  Low-amount SKUs and cancellation/return concentrations are displayed as review signals.
+**Observation** The top five categories account for approximately 99.18% of
+delivered-status-proxy reported gross amount, while the top five SKUs account
+for approximately 5.99% of the SKU-attributed scope.
 
-**Evidence**  Low-volume review is limited to the observed March 31 to June 26 proxy window. Cancelled and return-related records are calculated from the full reported source for status investigation.
+**Evidence** Shares use the same within-scope reported gross amount denominator
+and sum to 100% across the full category and SKU tables. B2B/B2C category mix is
+also calculated within the Amazon source.
 
-**Interpretation**  Low volume is not evidence of slow movement, and status concentration is not a true rate.
+**Interpretation** Category concentration is high, while SKU concentration is
+more dispersed. This is a mix signal, not a causal or economic conclusion.
 
-**Business implication**  Check lifecycle, availability, listing quality, returns, margin, and strategic role before any rationalisation decision.
+**Business implication** Pair concentration review with status, availability,
+and catalogue checks before assortment decisions.
 
-**Limitation**  No product is labelled slow-moving, unprofitable, discontinued, or a true stockout.
+**Limitation** No profitability, margin, inventory, customer, or demand metric
+supports a stronger portfolio conclusion.
 
-## Stock and mapping limitations
+## High- and low-volume review
 
-- Stock is a separate undated snapshot with five duplicate non-null `sku_code` keys.
-- No sales-to-stock join or stockout rate is calculated.
-- Amazon has no colour field; colour analysis is limited to the separate stock snapshot.
-- Shared non-null MRP fields between March and May had no conflicting values, but their business definitions are unconfirmed.
+**Observation** High- and low-reported-amount SKUs are displayed within the
+observed Amazon proxy window.
+
+**Evidence** The review tables include reported gross amount, gross units,
+line count, distinct orders, and amount coverage. The window is bounded by the
+available extract rather than a lifecycle period.
+
+**Interpretation** Low observed volume is not evidence of slow movement or poor
+performance.
+
+**Business implication** Validate launch date, availability, listing quality,
+strategic role, and longer history before taking action.
+
+**Limitation** No product is labelled slow-moving, recently introduced,
+unprofitable, discontinued, or excess inventory.
+
+## Status-proxy composition
+
+**Observation** Cancellation and return-related labels can be concentrated by
+category and SKU.
+
+**Evidence** Cancelled and return-related rows are analysed from the complete
+reported Amazon source. The notebook reports line counts, units, reported gross
+amount, and amount coverage by category and SKU.
+
+**Interpretation** These are status-composition review signals, not rates.
+
+**Business implication** Prioritise status-definition and data-quality review
+for categories or SKUs with high proxy counts.
+
+**Limitation** No approved order-status precedence, returned quantity, refund
+value, or event timestamp exists.
+
+## Stock and cross-source exclusions
+
+- Stock remains a separate undated SKU/size/colour snapshot with duplicate and
+  missing `sku_code` values.
+- No Amazon sales-to-stock, sales-to-MRP, or sales-to-price join is performed.
+- Colour analysis is limited to the stock snapshot because Amazon sales has no
+  colour field.
+- Shared March/May reference-price fields are not treated as realised selling
+  price or cost.
+- International monetary product analysis is not combined with Amazon because
+  currency and order identifiers are absent.
