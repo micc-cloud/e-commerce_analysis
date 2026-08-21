@@ -16,8 +16,13 @@ stopped after the feasibility assessment as required.
 - `reports/validation_reports/phase_7_validation.md`
 - `reports/profitability_feasibility.md`
 - Previous `reports/validation_reports/phase_8_validation.md`
-- All seven cleaned source files relevant to sales, product, warehouse, stock,
-  international sales, and expenses
+- `data/cleaned/amazon_sale_report_cleaned.csv`
+- `data/cleaned/international_sale_report_cleaned.csv`
+- `data/cleaned/may_2022_cleaned.csv`
+- `data/cleaned/p_l_march_2021_cleaned.csv`
+- `data/cleaned/cloud_warehouse_compersion_chart_cleaned.csv`
+- `data/cleaned/sale_report_cleaned.csv`
+- `data/cleaned/expense_iigf_cleaned.csv`
 
 ## Files changed
 
