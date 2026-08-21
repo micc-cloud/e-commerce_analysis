@@ -34,4 +34,10 @@ This repository contains a business-focused e-commerce analytics workflow based 
 
 ## Business Focus
 
-The analysis is designed to support operational and commercial decisions rather than only to visualize data. The next stage should concentrate on revenue contribution, profitability, product-level performance, and supply-chain or fulfillment reliability.
+The validated analysis supports source-local sales, product, pricing, and
+operational-status decisions. Profitability analytics is excluded because
+transaction-linked cost, fee, tax, refund, and allocation data is unavailable.
+Predictive analytics is also excluded because event-level history, leakage-safe
+targets, and an approved business prediction objective are unavailable. These
+phases remain documented in the feasibility reports and are not completed
+project features.
