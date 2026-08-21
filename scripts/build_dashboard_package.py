@@ -70,10 +70,10 @@ def build() -> None:
 
     fact_columns = [
         "order_id", "date", "date_key", "month_start", "month_label", "is_partial_period",
-        "status", "status_group", "fulfilment", "sales_channel", "ship_service_level",
-        "style", "sku", "category", "size", "asin", "courier_status", "qty", "currency",
-        "amount", "amount_present", "reported_unit_price_proxy", "reported_unit_price_band", "ship_city", "ship_state",
-        "ship_postal_code", "ship_country", "promotion_ids", "b2b", "fulfilled_by",
+        "status", "status_group", "fulfilment", "sales_channel",
+        "style", "sku", "category", "size", "qty", "currency",
+        "amount", "amount_present", "reported_unit_price_proxy", "reported_unit_price_band", "ship_state",
+        "b2b",
         "is_cancelled_status_proxy", "is_return_status_proxy", "is_shipped_status_proxy",
         "is_delivered_status_proxy",
     ]

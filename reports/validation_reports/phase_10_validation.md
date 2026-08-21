@@ -100,7 +100,9 @@ delivery-time measure is defined.
 | International rows | 12,322 | 12,322 | PASS |
 
 The dashboard builder was rerun from the cleaned files after a focused repair
-to ensure `dim_date.csv` and the validated price-band field are generated.
+to ensure `dim_date.csv` and the validated price-band field are generated. The
+Amazon fact retains the 26 fields required by the four-page specification and
+omits unused source columns to keep the Power BI import package lightweight.
 
 ## Tests performed
 
