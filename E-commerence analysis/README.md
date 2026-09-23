@@ -4,19 +4,6 @@ This folder is a static, GitHub Pages-friendly web version of the validated
 Power BI build package. It uses source-local Amazon analysis and keeps the
 international monetary source separate.
 
-## View locally
-
-From the repository root, run:
-
-```bash
-python -m http.server 8000
-```
-
-Then open:
-`http://localhost:8000/E-commerence%20analysis/`
-
-Opening `index.html` directly may block the JSON data request in some browsers.
-
 ## Show it on GitHub
 
 1. Push this folder to the repository.
