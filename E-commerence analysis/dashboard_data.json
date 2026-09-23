@@ -1,0 +1,397 @@
+{
+  "scope": {
+    "amazon_lines": 128969,
+    "amazon_orders": 120378,
+    "reported_amount": 78590043.30000001,
+    "amount_coverage": 0.9395823802619234,
+    "gross_units": 116646.0,
+    "international_lines": 12322,
+    "international_reported_amount": 10834927.19,
+    "international_pieces": 16294.0,
+    "delivered_proxy_orders": 26566,
+    "valid_price_lines": 28761,
+    "mixed_status_orders": 0,
+    "date_range": [
+      "2022-03-31",
+      "2022-06-29"
+    ]
+  },
+  "monthly": [
+    {
+      "month_label": "Mar 2022",
+      "is_partial_period": true,
+      "reported_amount": 101683.85,
+      "gross_units": 156,
+      "lines": 171,
+      "distinct_orders": 158,
+      "amount_coverage": 0.9473684211
+    },
+    {
+      "month_label": "Apr 2022",
+      "is_partial_period": false,
+      "reported_amount": 28838708.32,
+      "gross_units": 44206,
+      "lines": 49065,
+      "distinct_orders": 45858,
+      "amount_coverage": 0.9389177622
+    },
+    {
+      "month_label": "May 2022",
+      "is_partial_period": false,
+      "reported_amount": 26225004.75,
+      "gross_units": 38009,
+      "lines": 42037,
+      "distinct_orders": 39221,
+      "amount_coverage": 0.9404572163
+    },
+    {
+      "month_label": "Jun 2022",
+      "is_partial_period": true,
+      "reported_amount": 23424646.38,
+      "gross_units": 34275,
+      "lines": 37696,
+      "distinct_orders": 35141,
+      "amount_coverage": 0.939436545
+    }
+  ],
+  "category": [
+    {
+      "category": "Set",
+      "reported_amount": 39202022.03,
+      "gross_units": 45287,
+      "distinct_orders": 47845,
+      "contribution": 0.4988166488
+    },
+    {
+      "category": "kurta",
+      "reported_amount": 21299013.7,
+      "gross_units": 45044,
+      "distinct_orders": 46561,
+      "contribution": 0.2710141489
+    },
+    {
+      "category": "Western Dress",
+      "reported_amount": 11216072.69,
+      "gross_units": 13943,
+      "distinct_orders": 14994,
+      "contribution": 0.1427162045
+    },
+    {
+      "category": "Top",
+      "reported_amount": 5347792.3,
+      "gross_units": 9903,
+      "distinct_orders": 10155,
+      "contribution": 0.0680466898
+    },
+    {
+      "category": "Ethnic Dress",
+      "reported_amount": 791217.66,
+      "gross_units": 1053,
+      "distinct_orders": 1148,
+      "contribution": 0.0100676578
+    },
+    {
+      "category": "Blouse",
+      "reported_amount": 458408.18,
+      "gross_units": 863,
+      "distinct_orders": 897,
+      "contribution": 0.005832904
+    },
+    {
+      "category": "Bottom",
+      "reported_amount": 150667.98,
+      "gross_units": 398,
+      "distinct_orders": 410,
+      "contribution": 0.0019171383
+    },
+    {
+      "category": "Saree",
+      "reported_amount": 123933.76,
+      "gross_units": 152,
+      "distinct_orders": 144,
+      "contribution": 0.0015769652
+    },
+    {
+      "category": "Dupatta",
+      "reported_amount": 915.0,
+      "gross_units": 3,
+      "distinct_orders": 2,
+      "contribution": 1.16427e-05
+    }
+  ],
+  "sku": [
+    {
+      "sku": "J0230-SKD-M",
+      "reported_amount": 526536.2,
+      "gross_units": 467,
+      "distinct_orders": 506,
+      "contribution": 0.0066997825
+    },
+    {
+      "sku": "JNE3797-KR-L",
+      "reported_amount": 524581.77,
+      "gross_units": 661,
+      "distinct_orders": 773,
+      "contribution": 0.0066749139
+    },
+    {
+      "sku": "J0230-SKD-S",
+      "reported_amount": 479937.14,
+      "gross_units": 421,
+      "distinct_orders": 452,
+      "contribution": 0.0061068441
+    },
+    {
+      "sku": "JNE3797-KR-M",
+      "reported_amount": 454290.16,
+      "gross_units": 561,
+      "distinct_orders": 657,
+      "contribution": 0.0057805053
+    },
+    {
+      "sku": "JNE3797-KR-S",
+      "reported_amount": 407302.57,
+      "gross_units": 503,
+      "distinct_orders": 587,
+      "contribution": 0.0051826231
+    },
+    {
+      "sku": "JNE3797-KR-XL",
+      "reported_amount": 332155.24,
+      "gross_units": 415,
+      "distinct_orders": 474,
+      "contribution": 0.004226429
+    },
+    {
+      "sku": "J0230-SKD-L",
+      "reported_amount": 305616.95,
+      "gross_units": 272,
+      "distinct_orders": 297,
+      "contribution": 0.003888749
+    },
+    {
+      "sku": "JNE3797-KR-XS",
+      "reported_amount": 303616.7,
+      "gross_units": 386,
+      "distinct_orders": 431,
+      "contribution": 0.0038632973
+    },
+    {
+      "sku": "SET268-KR-NP-XL",
+      "reported_amount": 284058.96,
+      "gross_units": 373,
+      "distinct_orders": 386,
+      "contribution": 0.0036144395
+    },
+    {
+      "sku": "JNE3797-KR-XXXL",
+      "reported_amount": 276375.8,
+      "gross_units": 353,
+      "distinct_orders": 386,
+      "contribution": 0.003516677
+    }
+  ],
+  "price_bands": [
+    {
+      "reported_unit_price_band": "[0,500)",
+      "reported_amount": 3785260.0,
+      "gross_units": 10104,
+      "lines": 10053
+    },
+    {
+      "reported_unit_price_band": "[1000,2000)",
+      "reported_amount": 3509659.0,
+      "gross_units": 2880,
+      "lines": 2870
+    },
+    {
+      "reported_unit_price_band": "[2000,inf)",
+      "reported_amount": 17575.0,
+      "gross_units": 7,
+      "lines": 7
+    },
+    {
+      "reported_unit_price_band": "[500,1000)",
+      "reported_amount": 11338321.0,
+      "gross_units": 15895,
+      "lines": 15831
+    }
+  ],
+  "category_price": [
+    {
+      "category": "Set",
+      "reported_unit_price_proxy": 824.3892491307,
+      "valid_lines": 10641
+    },
+    {
+      "category": "Saree",
+      "reported_unit_price_proxy": 785.7272727273,
+      "valid_lines": 22
+    },
+    {
+      "category": "Western Dress",
+      "reported_unit_price_proxy": 741.7198458574,
+      "valid_lines": 5190
+    },
+    {
+      "category": "Ethnic Dress",
+      "reported_unit_price_proxy": 702.3333333333,
+      "valid_lines": 234
+    },
+    {
+      "category": "Blouse",
+      "reported_unit_price_proxy": 499.0946745562,
+      "valid_lines": 169
+    },
+    {
+      "category": "Top",
+      "reported_unit_price_proxy": 492.9322916667,
+      "valid_lines": 1920
+    },
+    {
+      "category": "kurta",
+      "reported_unit_price_proxy": 449.2033314187,
+      "valid_lines": 10446
+    },
+    {
+      "category": "Bottom",
+      "reported_unit_price_proxy": 342.8273381295,
+      "valid_lines": 139
+    }
+  ],
+  "b2b": [
+    {
+      "b2b": false,
+      "reported_amount": 77998822.51,
+      "gross_units": 115806,
+      "distinct_orders": 119584,
+      "label": "B2C"
+    },
+    {
+      "b2b": true,
+      "reported_amount": 591220.79,
+      "gross_units": 840,
+      "distinct_orders": 794,
+      "label": "B2B"
+    }
+  ],
+  "statuses": [
+    {
+      "status_label": "Shipped",
+      "distinct_orders": 72826,
+      "composition": 0.6049776537
+    },
+    {
+      "status_label": "Shipped - Delivered to Buyer",
+      "distinct_orders": 26566,
+      "composition": 0.2206881656
+    },
+    {
+      "status_label": "Cancelled",
+      "distinct_orders": 17185,
+      "composition": 0.1427586436
+    },
+    {
+      "status_label": "Shipped - Returned to Seller",
+      "distinct_orders": 1851,
+      "composition": 0.0153765638
+    },
+    {
+      "status_label": "Shipped - Picked Up",
+      "distinct_orders": 918,
+      "composition": 0.0076259782
+    },
+    {
+      "status_label": "Pending",
+      "distinct_orders": 584,
+      "composition": 0.0048513848
+    },
+    {
+      "status_label": "Pending - Waiting for Pick Up",
+      "distinct_orders": 262,
+      "composition": 0.0021764774
+    },
+    {
+      "status_label": "Shipped - Returning to Seller",
+      "distinct_orders": 130,
+      "composition": 0.0010799315
+    },
+    {
+      "status_label": "Shipped - Out for Delivery",
+      "distinct_orders": 32,
+      "composition": 0.0002658293
+    },
+    {
+      "status_label": "Shipped - Rejected by Buyer",
+      "distinct_orders": 11,
+      "composition": 9.13788e-05
+    },
+    {
+      "status_label": "Shipping",
+      "distinct_orders": 8,
+      "composition": 6.64573e-05
+    },
+    {
+      "status_label": "Shipped - Lost in Transit",
+      "distinct_orders": 4,
+      "composition": 3.32287e-05
+    },
+    {
+      "status_label": "Shipped - Damaged",
+      "distinct_orders": 1,
+      "composition": 8.3072e-06
+    }
+  ],
+  "states": [
+    {
+      "ship_state": "MAHARASHTRA",
+      "reported_amount": 13334595.14,
+      "distinct_orders": 20780
+    },
+    {
+      "ship_state": "KARNATAKA",
+      "reported_amount": 10481114.37,
+      "distinct_orders": 16182
+    },
+    {
+      "ship_state": "TELANGANA",
+      "reported_amount": 6916615.65,
+      "distinct_orders": 10405
+    },
+    {
+      "ship_state": "UTTAR PRADESH",
+      "reported_amount": 6816109.08,
+      "distinct_orders": 10062
+    },
+    {
+      "ship_state": "TAMIL NADU",
+      "reported_amount": 6515650.11,
+      "distinct_orders": 10519
+    },
+    {
+      "ship_state": "DELHI",
+      "reported_amount": 4235215.97,
+      "distinct_orders": 6359
+    },
+    {
+      "ship_state": "KERALA",
+      "reported_amount": 3830227.58,
+      "distinct_orders": 6105
+    },
+    {
+      "ship_state": "WEST BENGAL",
+      "reported_amount": 3507880.44,
+      "distinct_orders": 5653
+    },
+    {
+      "ship_state": "ANDHRA PRADESH",
+      "reported_amount": 3219831.72,
+      "distinct_orders": 4979
+    },
+    {
+      "ship_state": "HARYANA",
+      "reported_amount": 2882092.99,
+      "distinct_orders": 4142
+    }
+  ]
+}

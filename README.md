@@ -21,6 +21,7 @@ This repository contains a business-focused e-commerce analytics workflow based 
 - Data quality documentation in the reports folder
 - Exploratory analysis workflow in the scripts folder
 - Business-focused EDA visuals and summaries in the reports/eda_outputs folder
+- [Static web dashboard for GitHub Pages](E-commerence%20analysis/)
 
 ## How to Run the Analysis
 
