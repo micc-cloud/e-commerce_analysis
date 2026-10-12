@@ -4,6 +4,23 @@
 
 This repository contains a business-focused e-commerce analytics workflow based on cleaned CSV datasets. The work covers data-quality validation, exploratory analysis, and insight generation for commercial and operational decision-making.
 
+## Current Scope
+
+- The primary analysis is source-local Amazon India activity: 128,969 order-line records and 120,378 distinct orders observed from 2022-03-31 to 2022-06-29.
+- A separate international sales extract is retained for context, but it is not combined with Amazon because it has no comparable currency or order identifier.
+- Sales, product, pricing, and operations analysis completed in Python/SQL, with key SQL outputs reconciled against Pandas calculations.
+- KPI framework separating supported metrics, analytical proxies, and metrics the data could not reliably support.
+
+### Scope Decisions
+
+**Scope decisions:** Profitability and predictive modelling were formally excluded: the required cost and event-level data was not reliable enough, so they were documented as limitations rather than producing misleading results.
+
+## Headline Findings
+
+- 120,378 distinct Amazon orders were represented in the validated source extract.
+- Reported gross amount was INR 78.6 million, with 93.96% amount coverage; this is not validated net sales.
+- Amazon.in was the dominant observed sales channel: 128,845 of 128,969 lines; the 124 Non-Amazon lines are too few for a reliable cross-channel comparison.
+
 ## What Was Completed
 
 - Reviewed the cleaned datasets and verified their basic reliability.
@@ -42,3 +59,8 @@ Predictive analytics is also excluded because event-level history, leakage-safe
 targets, and an approved business prediction objective are unavailable. These
 phases remain documented in the feasibility reports and are not completed
 project features.
+
+## Next Steps
+
+- Publish and refine the Power BI-ready dashboard or static web dashboard.
+- Turn the validated findings into recruiter-facing business recommendations.
