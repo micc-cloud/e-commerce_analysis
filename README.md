@@ -1,104 +1,66 @@
 # E-Commerce Business Intelligence & Performance Analytics
 
-## Project Overview
+## Project Summary
 
-This project is an end-to-end business analytics case study for a multi-channel e-commerce operation. It simulates the work of a Business Analyst/Data Analyst supporting management decisions around revenue growth, profitability, product performance, pricing, and operations.
-
-Rather than treating the dataset only as a dashboard exercise, the project follows a full business analytics workflow: business understanding, data preparation, exploratory analysis, KPI design, dashboard development, and business recommendations.
-
-## Business Problem
-
-The company sells products through multiple online channels. Management wants to understand:
-
-- Which channels and products generate the strongest revenue and profit
-- Which products sell well but have weak margins
-- Whether pricing differs meaningfully across platforms
-- How cancellations and fulfilment issues affect performance
-- Where the business should focus to improve profitability
-
-## Dataset
-
-This project uses the **Unlock Profits with E-Commerce Sales Data** dataset from Kaggle.
-
-The dataset contains multiple business-related tables, including:
-
-- Sales transactions
-- Product information
-- Pricing data
-- Profit & Loss reports
-- Warehouse information
-- Expense and operational data
-
-Because the data comes from different sources, an important first step is cleaning, standardizing, and preparing the files for analysis.
+This repository contains a business-focused e-commerce analytics workflow based on cleaned CSV datasets. The work covers data-quality validation, exploratory analysis, and insight generation for commercial and operational decision-making.
 
 ## Current Scope
 
-- Raw dataset extraction
-- Data cleaning and standardization
-- Data quality profiling
-- Cleaned CSV outputs for analysis
-- Reproducible cleaning script
+- The primary analysis is source-local Amazon India activity: 128,969 order-line records and 120,378 distinct orders observed from 2022-03-31 to 2022-06-29.
+- A separate international sales extract is retained for context, but it is not combined with Amazon because it has no comparable currency or order identifier.
+- Sales, product, pricing, and operations analysis completed in Python/SQL, with key SQL outputs reconciled against Pandas calculations.
+- KPI framework separating supported metrics, analytical proxies, and metrics the data could not reliably support.
 
-## Tools & Technologies
+### Scope Decisions
 
-- Python
-- Pandas
-- SQL
-- Power BI
-- Git & GitHub
+**Scope decisions:** Profitability and predictive modelling were formally excluded: the required cost and event-level data was not reliable enough, so they were documented as limitations rather than producing misleading results.
 
-## Project Workflow
+## Headline Findings
 
-1. Business Understanding
-2. Data Understanding
-3. Data Preparation
-4. Exploratory Data Analysis
-5. KPI Framework
-6. Sales Analytics
-7. Product Analytics
-8. Pricing Analytics
-9. Operations Analytics
-10. Profitability Analytics
-11. Dashboard Development
-12. Business Recommendations
+- 120,378 distinct Amazon orders were represented in the validated source extract.
+- Reported gross amount was INR 78.6 million, with 93.96% amount coverage; this is not validated net sales.
+- Amazon.in was the dominant observed sales channel: 128,845 of 128,969 lines; the 124 Non-Amazon lines are too few for a reliable cross-channel comparison.
 
-## Key Business KPIs
+## What Was Completed
 
-- Revenue
-- Profit
-- Gross Margin
-- Net Margin
-- Average Order Value
-- Order Cancellation Rate
-- Fulfilment Rate
-- Product Profitability
-- Sales Growth
-
-## Project Structure
-
-```text
-data/
-  raw/          Original extracted source CSVs
-  cleaned/      Analysis-ready cleaned CSVs
-reports/        Data quality report and cleaned dataset package
-scripts/        Reproducible data cleaning pipeline
-```
+- Reviewed the cleaned datasets and verified their basic reliability.
+- Performed a structured data-quality assessment covering duplicates, missing values, and suspicious values.
+- Built a reusable Python-based exploratory analysis workflow using Pandas, NumPy, Matplotlib, Plotly, and Seaborn.
+- Organized the analysis around business questions such as:
+  - which products or categories are driving performance,
+  - whether pricing and quantity patterns are stable,
+  - where missing or unreliable data may affect conclusions,
+  - and which areas should be prioritized for deeper business analysis.
 
 ## Key Outputs
 
-- `reports/data_quality_report.md`
-- `reports/data_quality_profile.json`
-- `reports/cleaned_ecommerce_datasets.zip`
-- `scripts/clean_ecommerce_data.py`
+- Cleaned datasets in the data/cleaned folder
+- Data quality documentation in the reports folder
+- Exploratory analysis workflow in the scripts folder
+- Business-focused EDA visuals and summaries in the reports/eda_outputs folder
+- [Static web dashboard for GitHub Pages](E-commerence%20analysis/)
+
+## How to Run the Analysis
+
+1. Install the required Python packages:
+   pip install pandas numpy matplotlib seaborn plotly
+
+2. Run the analysis script from the repository root:
+   python scripts/EDA.py
+
+3. Review the generated outputs in the reports/eda_outputs folder.
+
+## Business Focus
+
+The validated analysis supports source-local sales, product, pricing, and
+operational-status decisions. Profitability analytics is excluded because
+transaction-linked cost, fee, tax, refund, and allocation data is unavailable.
+Predictive analytics is also excluded because event-level history, leakage-safe
+targets, and an approved business prediction objective are unavailable. These
+phases remain documented in the feasibility reports and are not completed
+project features.
 
 ## Next Steps
 
-- Build the analytical data model
-- Define KPI calculations
-- Perform sales, product, pricing, supply chain, and profitability analysis
-- Create a Power BI executive dashboard
-- Develop final business recommendations using:
-
-```text
-Observation -> Insight -> Recommendation -> Expected Business Impact
-```
+- Publish and refine the Power BI-ready dashboard or static web dashboard.
+- Turn the validated findings into recruiter-facing business recommendations.

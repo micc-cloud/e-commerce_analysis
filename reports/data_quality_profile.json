@@ -140,54 +140,14 @@
     "file": "International sale Report.csv",
     "raw_rows": 37432,
     "raw_columns": 10,
-    "cleaned_rows": 24541,
+    "cleaned_rows": 12322,
     "cleaned_columns": 9,
-    "exact_duplicate_rows_removed": 12891,
+    "exact_duplicate_rows_removed": 6313,
     "missing_values": [
       {
         "column": "sku",
-        "missing_count": 2425,
-        "missing_pct": 9.88
-      },
-      {
-        "column": "pcs",
-        "missing_count": 1041,
-        "missing_pct": 4.24
-      },
-      {
-        "column": "rate",
-        "missing_count": 1041,
-        "missing_pct": 4.24
-      },
-      {
-        "column": "gross_amt",
-        "missing_count": 1041,
-        "missing_pct": 4.24
-      },
-      {
-        "column": "customer",
-        "missing_count": 1040,
-        "missing_pct": 4.24
-      },
-      {
-        "column": "style",
-        "missing_count": 1040,
-        "missing_pct": 4.24
-      },
-      {
-        "column": "size",
-        "missing_count": 1040,
-        "missing_pct": 4.24
-      },
-      {
-        "column": "months",
-        "missing_count": 25,
-        "missing_pct": 0.1
-      },
-      {
-        "column": "date",
-        "missing_count": 1,
-        "missing_pct": 0.0
+        "missing_count": 1379,
+        "missing_pct": 11.19
       }
     ],
     "negative_values": {},
@@ -203,8 +163,9 @@
       "gross_amt"
     ],
     "notes": [
-      "Dropped generated index column.",
-      "Removed 12,891 exact duplicate rows."
+      "Parsed source dates as month-day-year (`%m-%d-%y`) and formatted output as `mm/dd/yyyy`.",
+      "Validated the date month and year against the `months` field; conflicting rows were excluded.",
+      "Excluded 18,797 rows without a valid transaction date or with a conflicting month label."
     ],
     "cleaned_file": "international_sale_report_cleaned.csv"
   },

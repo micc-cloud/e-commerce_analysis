@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="E-commerce business intelligence portfolio dashboard">
+  <title>E-commerce Analysis | Business Intelligence Dashboard</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand-block">
+      <p class="eyebrow">E-commerce business intelligence</p>
+      <h1>Reported performance dashboard</h1>
+      <p class="subtitle">A source-local view of sales, products, pricing signals, and operations.</p>
+    </div>
+    <div class="status-pill"><span class="status-dot"></span>Validated source package</div>
+  </header>
+
+  <nav class="tabs" aria-label="Dashboard pages">
+    <button class="tab active" data-page="overview">Executive Overview</button>
+    <button class="tab" data-page="sales">Sales Performance</button>
+    <button class="tab" data-page="product">Product &amp; Pricing</button>
+    <button class="tab" data-page="operations">Operations</button>
+  </nav>
+
+  <main>
+    <section class="page active" id="page-overview" aria-labelledby="overview-title">
+      <div class="page-heading"><div><p class="eyebrow">01 / executive view</p><h2 id="overview-title">What is happening in the observed Amazon dataset?</h2></div><span class="period-note" id="overview-period"></span></div>
+      <div class="warning-banner"><strong>Read first:</strong> Reported Gross Amount is not net sales. Status values are analytical composition proxies. March and June are partial observed periods.</div>
+      <div class="kpi-grid" id="overview-kpis"></div>
+      <div class="chart-grid two-up">
+        <article class="panel chart-panel wide"><div class="panel-heading"><div><p class="eyebrow">Trend</p><h3>Reported Gross Amount by observed month</h3></div><span class="coverage-badge" id="coverage-badge"></span></div><canvas id="overview-trend"></canvas></article>
+        <article class="panel chart-panel"><div class="panel-heading"><div><p class="eyebrow">Mix</p><h3>Category contribution</h3></div></div><canvas id="overview-category"></canvas></article>
+      </div>
+      <div class="chart-grid two-up">
+        <article class="panel chart-panel"><div class="panel-heading"><div><p class="eyebrow">Operations signal</p><h3>Status composition proxy</h3></div></div><canvas id="overview-status"></canvas></article>
+        <article class="panel insight-panel"><p class="eyebrow">Decision lens</p><h3>Where to look next</h3><ul><li>Use category concentration to prioritise assortment review.</li><li>Keep amount coverage visible beside every monetary view.</li><li>Investigate status definitions before calling them operational rates.</li></ul><p class="muted">All measures remain source-local and descriptive.</p></article>
+      </div>
+    </section>
+
+    <section class="page" id="page-sales" aria-labelledby="sales-title">
+      <div class="page-heading"><div><p class="eyebrow">02 / sales performance</p><h2 id="sales-title">How do reported sales and units move through time?</h2></div><span class="period-note">Amazon INR shown separately from international values</span></div>
+      <div class="warning-banner"><strong>Period caution:</strong> March and June are partial observed periods. International currency is unspecified and is never combined with Amazon.</div>
+      <div class="chart-grid two-up">
+        <article class="panel chart-panel wide"><div class="panel-heading"><div><p class="eyebrow">Monthly trend</p><h3>Reported Gross Amount and Gross Units</h3></div></div><canvas id="sales-monthly"></canvas></article>
+        <article class="panel chart-panel"><div class="panel-heading"><div><p class="eyebrow">Commercial mix</p><h3>B2B / B2C reported amount</h3></div></div><canvas id="sales-b2b"></canvas></article>
+      </div>
+      <div class="chart-grid two-up">
+        <article class="panel chart-panel"><div class="panel-heading"><div><p class="eyebrow">Geography</p><h3>Top ship states by reported amount</h3></div></div><canvas id="sales-states"></canvas></article>
+        <article class="panel table-panel"><div class="panel-heading"><div><p class="eyebrow">Separate source</p><h3>International reported activity</h3></div></div><div id="international-table"></div><p class="muted">Currency unspecified; not comparable with Amazon INR.</p></article>
+      </div>
+    </section>
+
+    <section class="page" id="page-product" aria-labelledby="product-title">
+      <div class="page-heading"><div><p class="eyebrow">03 / product &amp; pricing</p><h2 id="product-title">Which source-local products deserve attention?</h2></div><span class="period-note">Pricing uses the delivered-status proxy</span></div>
+      <div class="warning-banner"><strong>Proxy label:</strong> Reported Unit-Price Proxy = amount / qty where amount is present and qty &gt; 0 within delivered-status-proxy rows. It is not realised selling price.</div>
+      <div class="chart-grid two-up">
+        <article class="panel chart-panel wide"><div class="panel-heading"><div><p class="eyebrow">Contribution</p><h3>Top source-local SKUs by reported amount</h3></div></div><canvas id="product-sku"></canvas></article>
+        <article class="panel chart-panel"><div class="panel-heading"><div><p class="eyebrow">Analytical bands</p><h3>Reported unit-price proxy bands</h3></div></div><canvas id="product-bands"></canvas></article>
+      </div>
+      <div class="chart-grid two-up">
+        <article class="panel chart-panel"><div class="panel-heading"><div><p class="eyebrow">Observed distribution</p><h3>Reported unit-price proxy by category</h3></div></div><canvas id="product-category-price"></canvas></article>
+        <article class="panel insight-panel"><p class="eyebrow">Governance boundary</p><h3>What this view cannot say</h3><ul><li>No MRP or discount join is used.</li><li>No elasticity or optimal price is inferred.</li><li>No product is labelled profitable, slow-moving, or discontinued.</li></ul><p class="muted">Amazon SKU keys remain source-local.</p></article>
+      </div>
+    </section>
+
+    <section class="page" id="page-operations" aria-labelledby="operations-title">
+      <div class="page-heading"><div><p class="eyebrow">04 / operations</p><h2 id="operations-title">What operational signals are visible in source statuses?</h2></div><span class="period-note">Status composition proxy only</span></div>
+      <div class="warning-banner"><strong>Do not overread:</strong> These are source-status composition proxies, not official cancellation, return, fulfilment, delivery, or SLA rates. Mixed statuses require an approved precedence rule.</div>
+      <div class="kpi-grid compact" id="operations-kpis"></div>
+      <div class="chart-grid two-up">
+        <article class="panel chart-panel"><div class="panel-heading"><div><p class="eyebrow">Status mix</p><h3>Status composition proxy</h3></div></div><canvas id="operations-status"></canvas></article>
+        <article class="panel chart-panel"><div class="panel-heading"><div><p class="eyebrow">Operational governance</p><h3>Mixed-status order check</h3></div></div><div class="governance-count" id="mixed-status-count"></div><p class="muted">If future data contains an order with multiple line statuses, it remains labelled MIXED_STATUS_REQUIRES_RULE rather than being assigned to Cancelled or Shipped.</p></article>
+      </div>
+      <div class="chart-grid two-up">
+        <article class="panel chart-panel"><div class="panel-heading"><div><p class="eyebrow">Geographic review</p><h3>Top states by distinct orders</h3></div></div><canvas id="operations-states"></canvas></article>
+        <article class="panel insight-panel"><p class="eyebrow">Further investigation</p><h3>Data needed for true operations KPIs</h3><ul><li>Order-created, shipped, delivered, cancellation, and return timestamps.</li><li>Approved order-status precedence.</li><li>Transaction-linked warehouse, courier, and shipping costs.</li></ul><p class="muted">Fulfilment comparison is not shown because only one meaningful category is present.</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer><span>Source-local descriptive analysis</span><span>Built from validated dashboard package</span></footer>
+  <script src="app.js"></script>
+</body>
+</html>

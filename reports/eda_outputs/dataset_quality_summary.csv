@@ -1,0 +1,8 @@
+dataset,rows,columns,duplicate_rows,missing_cells,columns_with_missing_values
+amazon_sale_report_cleaned,128969,22,0,161430,9
+cloud_warehouse_compersion_chart_cleaned,4,3,0,1,1
+expense_iigf_cleaned,21,4,0,0,0
+international_sale_report_cleaned,12322,9,0,1379,1
+may_2022_cleaned,1330,16,0,443,12
+p_l_march_2021_cleaned,1330,17,0,449,13
+sale_report_cleaned,9233,6,0,71,6
